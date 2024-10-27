@@ -1,6 +1,6 @@
 ﻿namespace LogisticControl.Domain.Enums;
 
-public enum StatusRoute
+public enum StatusRouteEnum
 {
     Pendente,
     EmAndamento,

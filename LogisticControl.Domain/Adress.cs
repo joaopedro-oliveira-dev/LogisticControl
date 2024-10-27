@@ -10,5 +10,5 @@ public class Adress
     public string? Complement { get; set; }
     public required string Neighborhood { get; set; }
     public required string City { get; set; }
-    public required State State { get; set; }
+    public required StateEnum State { get; set; }
 }

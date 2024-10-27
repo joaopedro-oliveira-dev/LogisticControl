@@ -1,6 +1,6 @@
 ﻿namespace LogisticControl.Domain.Enums;
 
-public enum State
+public enum StateEnum
 {
     AC,
     AL,

@@ -1,6 +1,6 @@
 ﻿namespace LogisticControl.Domain.Enums;
 
-public enum StatusItem
+public enum StatusItemEnum
 {
     Liberado,
     NaoLiberado,

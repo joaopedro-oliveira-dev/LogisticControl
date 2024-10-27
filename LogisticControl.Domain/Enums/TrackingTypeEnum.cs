@@ -1,6 +1,6 @@
 ﻿namespace LogisticControl.Domain.Enums;
 
-public enum TrackingType
+public enum TrackingTypeEnum
 {
     NF,
     OC,

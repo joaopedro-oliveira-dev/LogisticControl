@@ -8,6 +8,6 @@ public class Route
     public required DateTime Opening { get; set; }
     public DateTime? Realization { get; set; }
     public DateTime? Finalization { get; set; }
-    public required StatusRoute Status { get; set; }
+    public required StatusRouteEnum Status { get; set; }
     public string? Observation { get; set; }
 }
