@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LogisticControl.Domain;
 
-internal class Driver
+public class Driver
 {
     public int ID { get; set; }
     public required string Name { get; set; }

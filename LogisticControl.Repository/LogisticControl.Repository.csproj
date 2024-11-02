@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LogisticControl.Domain\LogisticControl.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
