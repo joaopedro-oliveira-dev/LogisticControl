@@ -1,7 +1,14 @@
+using LogisticControl.Core;
+using Microsoft.Extensions.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json").AddEnvironmentVariables().Build();
+
+builder.Services.AddDatabaseSettings(config);
 
 var app = builder.Build();
 

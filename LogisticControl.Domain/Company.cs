@@ -4,8 +4,9 @@ namespace LogisticControl.Domain;
 
 public class Company
 {
-    public int ID { get; set; }
-    public required string Name { get; set; }
-    public required PartnershipTypeEnum PartnershipType { get; set;}
-    public required string Phone { get; set; }
+    public int Id { get; private set; }
+    public string Name { get; private set; }
+    public PartnershipTypeEnum PartnershipType { get; private set;}
+    public string Phone { get; private set; }
+    public List<Adress> Adresses { get; private set; } // Propriedade de coleção
 }

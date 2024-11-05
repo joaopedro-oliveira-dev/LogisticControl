@@ -12,7 +12,6 @@ public static class RepositoryConfigurationExtension
     }
     public static void AddDatabaseSettings(this IServiceCollection services, IConfiguration _configuration)
     {
-        var conectionString = "Server=localhost;Port=5432;Database=LogisticControlDB;;Username=postgres;Password=1234";
-        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(conectionString));
+        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(_configuration.GetConnectionString("MyAppCs")));
     }
 }

@@ -4,14 +4,18 @@ namespace LogisticControl.Domain;
 
 public class Service
 {
-    public int ID { get; set; }
-    public required ServiceTypeEnum ServiceType { get; set; }
-    public PriorityEnum? Priority { get; set; }
-    public TrackingTypeEnum? TrackingType { get; set; }
-    public string? Tracking { get; set; }
-    public string? Observation { get; set; }
-    public required StatusItemEnum StatusItem { get; set; }
-    public string? Responsible { get; set; }
-    public string? DriverObservation { get; set; }
-    public required StatusServiceEnum Status { get; set; }
+    public int Id { get; private set; }
+    public ServiceTypeEnum ServiceType { get; private set; }
+    public int? Adress_Id { get; private set; }
+    public Adress? Adress {  get; private set; }
+    public PriorityEnum? Priority { get; private set; }
+    public TrackingTypeEnum? TrackingType { get; private set; }
+    public string? Tracking { get; private set; }
+    public string? Observation { get; private set; }
+    public StatusItemEnum StatusItem { get; private set; }
+    public string? Responsible { get; private set; }
+    public string? DriverObservation { get; private set; }
+    public StatusServiceEnum Status { get; private set; }
+    public int? Route_Id { get; private set; }
+    public Route? Route { get; private set; }
 }

@@ -4,11 +4,13 @@ namespace LogisticControl.Domain;
 
 public class Adress
 {
-    public int ID { get; set; }
-    public required string Street { get; set; }
-    public required int Number { get; set; }
-    public string? Complement { get; set; }
-    public required string Neighborhood { get; set; }
-    public required string City { get; set; }
-    public required StateEnum State { get; set; }
+    public int Id { get; private set; }
+    public string Street { get; private set; }
+    public int Number { get; private set; }
+    public string? Complement { get; private set; }
+    public string Neighborhood { get; private set; }
+    public string City { get; private set; }
+    public StateEnum State { get; private set; }
+    public int Company_Id { get; private set; } // Chave estrangeira
+    public Company Company { get; private set; } // Propriedade de navegação
 }
