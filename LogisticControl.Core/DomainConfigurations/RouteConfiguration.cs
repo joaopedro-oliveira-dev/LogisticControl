@@ -1,6 +1,8 @@
 ﻿using LogisticControl.Domain;
+using LogisticControl.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LogisticControl.Core.DomainConfigurations;
 
@@ -18,5 +20,8 @@ public class RouteConfiguration : IEntityTypeConfiguration<Route>
         builder.HasMany(r => r.Services)
             .WithOne()
             .IsRequired();
+
+        builder.Property(r => r.Status)
+            .HasConversion(new EnumToStringConverter<StatusRouteEnum>());
     }
 }
