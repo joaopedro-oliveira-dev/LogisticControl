@@ -12,6 +12,6 @@ public static class RepositoryConfigurationExtension
     }
     public static void AddDatabaseSettings(this IServiceCollection services, IConfiguration _configuration)
     {
-        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(_configuration.GetConnectionString("MyAppCs")));
+        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(_configuration.GetConnectionString("MyAppCs"), x => x.MigrationsAssembly("LogisticControl.Api")));
     }
 }

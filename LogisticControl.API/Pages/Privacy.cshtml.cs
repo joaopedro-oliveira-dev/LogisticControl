@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace LogisticControl.Pages
+namespace LogisticControl.API.Pages
 {
     public class PrivacyModel : PageModel
     {

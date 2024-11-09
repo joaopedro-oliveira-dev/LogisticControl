@@ -2,6 +2,7 @@
 using LogisticControl.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Route = LogisticControl.Domain.Route;
 
 namespace LogisticControl.Core;
 
@@ -46,6 +47,7 @@ public class AppDbContext : DbContext
                 index.SetDatabaseName(index.GetDatabaseName().ToUnderscoreCase());
             }
         }
+
         base.OnModelCreating(builder);
     }
 }
