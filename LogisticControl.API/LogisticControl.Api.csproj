@@ -13,4 +13,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LogisticControl.Core\LogisticControl.Core.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<BaseOutputPath>..\LogisticControl.Core\bin\</BaseOutputPath>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>net8.0</TargetFramework>
@@ -24,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LogisticControl.API\LogisticControl.Api.csproj" />
     <ProjectReference Include="..\LogisticControl.Domain\LogisticControl.Domain.csproj" />
   </ItemGroup>
 
