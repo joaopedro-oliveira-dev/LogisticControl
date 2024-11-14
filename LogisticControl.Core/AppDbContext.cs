@@ -10,7 +10,7 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-    public DbSet<Adress> Adresses { get; set; }
+    public DbSet<Address> Addresses { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Driver> Drivers { get; set; }
     public DbSet<Route> Routes { get; set; }

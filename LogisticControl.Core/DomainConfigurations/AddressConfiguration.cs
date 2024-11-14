@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LogisticControl.Core.DomainConfigurations;
 
-public class AdressConfiguration : IEntityTypeConfiguration<Adress>
+public class AddressConfiguration : IEntityTypeConfiguration<Address>
 {
-    public void Configure(EntityTypeBuilder<Adress> builder)
+    public void Configure(EntityTypeBuilder<Address> builder)
     {
         builder.HasKey(a =>  a.Id);
 
