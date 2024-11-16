@@ -13,5 +13,12 @@ public class DriverConfiguration : IEntityTypeConfiguration<Driver>
         builder.HasMany(d => d.Routes)
             .WithOne()
             .IsRequired(false);
+
+        builder.HasData(new List<Driver>
+        {
+            new Driver(1, "Amaro", "(31) 95648-7854"),
+            new Driver(2, "Higor", "(31) 94756-5467"),
+            new Driver(3, "Samuel", "(31) 98965-4756"),
+        });
     }
 }

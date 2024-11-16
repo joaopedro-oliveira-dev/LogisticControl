@@ -18,5 +18,11 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company>
 
         builder.Property(c => c.PartnershipType)
             .HasConversion(new EnumToStringConverter<PartnershipTypeEnum>());
+
+        builder.HasData(new List<Company>
+        {
+            new Company(1, "Mecbrun Industrial", PartnershipTypeEnum.Cliente, "(31) 96523-4789"),
+            new Company(2, "Geosol Geologia e Sondagens", PartnershipTypeEnum.Cliente, "(31) 99874-3642")
+        });
     }
 }

@@ -24,5 +24,11 @@ public class RouteConfiguration : IEntityTypeConfiguration<Route>
 
         builder.Property(r => r.Status)
             .HasConversion(new EnumToStringConverter<StatusRouteEnum>());
+
+        builder.HasData(new List<Route>
+        {
+            new Route(1, new DateTime(2024, 11, 12, 14, 30, 0), new DateTime(2024, 11, 12, 17, 0, 0), new DateTime(2024, 11, 13, 7, 30, 0), 1, StatusRouteEnum.Finalizada, null),
+            new Route(2, new DateTime(2024, 11, 14, 16, 0, 0), null, null, null, StatusRouteEnum.Pendente, null)
+        });
     }
 }

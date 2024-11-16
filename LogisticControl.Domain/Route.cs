@@ -4,6 +4,18 @@ namespace LogisticControl.Domain;
 
 public class Route
 {
+    public Route() { }
+    public Route(int id, DateTime opening, DateTime? realization, DateTime? finalization, int? driver_Id, StatusRouteEnum status, string? observation)
+    {
+        Id = id;
+        Opening = opening;
+        Realization = realization;
+        Finalization = finalization;
+        Driver_Id = driver_Id;
+        Status = status;
+        Observation = observation;
+    }
+
     public int Id { get; private set; }
     public DateTime Opening { get; private set; }
     public DateTime? Realization { get; private set; }

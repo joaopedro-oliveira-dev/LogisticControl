@@ -19,5 +19,12 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address>
 
         builder.Property(a => a.State)
             .HasConversion(new EnumToStringConverter<StateEnum>());
+
+        builder.HasData(new List<Address>
+        {
+            new Address(1, "Av. Lincoln Diogo Viana", 560, null, "Manoel Carlos", "Pedro Leopoldo", StateEnum.MG, 1),
+            new Address(2, "R. São Vicente", 255, null, "Olhos D'Água", "Belo Horizonte", StateEnum.MG, 2),
+            new Address(3, "R. das Goiabeiras", 333, null, "Vila Asas", "Lagoa Santa", StateEnum.MG, 2),
+        });
     }
 }
