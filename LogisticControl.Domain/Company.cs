@@ -17,5 +17,5 @@ public class Company
     public string Name { get; private set; }
     public PartnershipTypeEnum PartnershipType { get; private set;}
     public string Phone { get; private set; }
-    public List<Address> Adresses { get; private set; } // Propriedade de coleção
+    public ICollection<Address> Adresses { get; private set; } // Propriedade de coleção
 }

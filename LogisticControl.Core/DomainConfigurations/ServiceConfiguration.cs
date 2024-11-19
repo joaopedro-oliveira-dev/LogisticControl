@@ -17,8 +17,9 @@ public class ServiceConfiguration : IEntityTypeConfiguration<Service>
             .HasForeignKey(s => s.Adress_Id);
 
         builder.HasOne(s => s.Route)
-            .WithMany()
-            .HasForeignKey(s => s.Route_Id);
+            .WithMany(r => r.Services)
+            .HasForeignKey(s => s.Route_Id)
+            .IsRequired(false);
 
         builder.Property(s => s.ServiceType)
             .HasConversion(new EnumToStringConverter<ServiceTypeEnum>());

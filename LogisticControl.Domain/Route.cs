@@ -24,5 +24,5 @@ public class Route
     public Driver? Driver { get; private set; }
     public StatusRouteEnum Status { get; private set; }
     public string? Observation { get; private set; }
-    public List<Service> Services { get; private set; }
+    public ICollection<Service> Services { get; private set; }
 }

@@ -1,4 +1,5 @@
 using LogisticControl.Core;
+using LogisticControl.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.Deve
 builder.Services.AddDatabaseSettings(config);
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IRepository, Repository>();
 
 var app = builder.Build();
 

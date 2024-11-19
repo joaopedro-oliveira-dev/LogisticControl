@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LogisticControl.Repository;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
 
@@ -6,6 +7,11 @@ namespace LogisticControl.Api.Controllers;
 [Route("[controller]")]
 public class AddressController : ControllerBase
 {
+    public AddressController(IRepository repo) 
+    {
+
+    }
+
     [HttpGet]
     public IActionResult Get()
     {
