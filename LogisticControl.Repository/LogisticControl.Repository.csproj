@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LogisticControl.Core\LogisticControl.Core.csproj" />
     <ProjectReference Include="..\LogisticControl.Domain\LogisticControl.Domain.csproj" />
   </ItemGroup>
 

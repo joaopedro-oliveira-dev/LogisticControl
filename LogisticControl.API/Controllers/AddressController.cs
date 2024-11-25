@@ -1,4 +1,5 @@
-﻿using LogisticControl.Repository;
+﻿using LogisticControl.Domain;
+using LogisticControl.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
@@ -7,21 +8,115 @@ namespace LogisticControl.Api.Controllers;
 [Route("[controller]")]
 public class AddressController : ControllerBase
 {
+    private readonly IRepository _repo;
+    
     public AddressController(IRepository repo) 
     {
-
+        _repo = repo;
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
         try
         {
-            return Ok("");
+            var result = await _repo.GetAllAddressesAsync(true);
+            return Ok(result);
         }
         catch (Exception ex)
         {
-            return BadRequest($"ERRO: {ex.Message}");
+            return BadRequest($"Erro: {ex.Message}");
+        }
+    }
+
+    [HttpGet("{addressId}")]
+    public async Task<IActionResult> GetByAddressId(int addressId)
+    {
+        try
+        {
+            var result = await _repo.GetAddressAsyncById(addressId, true);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Erro: {ex.Message}");
+        }
+    }
+
+    [HttpGet("company/{companyId}")]
+    public async Task<IActionResult> GetByCompanyId(int companyId)
+    {
+        try
+        {
+            var result = await _repo.GetAddressesAsyncByCompanyId(companyId, true);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Erro: {ex.Message}");
+        }
+    }
+    [HttpPost]
+    public async Task<IActionResult> Post(Address domain)
+    {
+        try
+        {
+            _repo.Add(domain);
+
+            if(await _repo.SaveChangesAsync())
+            {
+                return Ok(domain);
+            }
+
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Erro: {ex.Message}");
+        }
+    }
+    [HttpPut("{addressId}")]
+    public async Task<IActionResult> Put(int addressId, Address domain)
+    {
+        try
+        {
+            var address = await _repo.GetAddressAsyncById(addressId, false);
+            if (address == null) return NotFound();
+
+            _repo.Update(domain);
+
+            if (await _repo.SaveChangesAsync()) 
+            {
+                return Ok(domain);
+            }
+
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Erro: {ex.Message}");
+        }
+    }
+    [HttpDelete("{addressId}")]
+    public async Task<IActionResult> Delete(int addressId)
+    {
+        try
+        {
+            var address = await _repo.GetAddressAsyncById(addressId, false);
+            if (address == null) return NotFound();
+
+            _repo.Delete(address);
+
+            if (await _repo.SaveChangesAsync())
+            {
+                return Ok("Deletado");
+            }
+
+            return BadRequest();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Erro: {ex.Message}");
         }
     }
 }

@@ -8,7 +8,10 @@ namespace LogisticControl.Core;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
+    { 
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+    }
 
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Company> Companies { get; set; }
