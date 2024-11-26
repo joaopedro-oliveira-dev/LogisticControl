@@ -1,6 +1,6 @@
 using LogisticControl.Core;
-using LogisticControl.Core.Helpers;
 using LogisticControl.Repository;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +12,15 @@ IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.Deve
 builder.Services.AddDatabaseSettings(config);
 
 builder.Services.AddControllers()
-                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy());
-                //.AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = 
-                //Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase)
+                .AddJsonOptions(options => options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase)
+                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNameCaseInsensitive = true)
+                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+
+builder.Services.AddControllersWithViews(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+
+//.AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = 
+//Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 builder.Services.AddScoped<IRepository, Repository>();
 
