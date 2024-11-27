@@ -6,11 +6,11 @@ public class Service
 {
     public Service() { }
     public Service(int id, ServiceTypeEnum serviceType, int? adress_Id, PriorityEnum? priority, TrackingTypeEnum? trackingType, string? tracking, 
-        string? observation, StatusItemEnum statusItem, string? responsible, string? driverObservation, StatusServiceEnum status, int? route_Id)
+        string? observation, StatusItemEnum statusItem, string? responsible, string? driverObservation, StatusServiceEnum status, int? routeId)
     {
         Id = id;
         ServiceType = serviceType;
-        Adress_Id = adress_Id;
+        AdressId = adress_Id;
         Priority = priority;
         TrackingType = trackingType;
         Tracking = tracking;
@@ -19,21 +19,21 @@ public class Service
         Responsible = responsible;
         DriverObservation = driverObservation;
         Status = status;
-        Route_Id = route_Id;
+        RouteId = routeId;
     }
 
-    public int Id { get; private set; }
-    public ServiceTypeEnum ServiceType { get; private set; }
-    public int? Adress_Id { get; private set; }
-    public Address? Adress {  get; private set; }
-    public PriorityEnum? Priority { get; private set; }
-    public TrackingTypeEnum? TrackingType { get; private set; }
-    public string? Tracking { get; private set; }
-    public string? Observation { get; private set; }
-    public StatusItemEnum StatusItem { get; private set; }
-    public string? Responsible { get; private set; }
-    public string? DriverObservation { get; private set; }
-    public StatusServiceEnum Status { get; private set; }
-    public int? Route_Id { get; private set; }
-    public Route? Route { get; private set; }
+    public int Id { get; set; }
+    public ServiceTypeEnum ServiceType { get; set; }
+    public int? AdressId { get; set; }
+    public virtual Address? Adress {  get; set; }
+    public PriorityEnum? Priority { get; set; }
+    public TrackingTypeEnum? TrackingType { get; set; }
+    public string? Tracking { get; set; }
+    public string? Observation { get; set; }
+    public StatusItemEnum StatusItem { get; set; }
+    public string? Responsible { get; set; }
+    public string? DriverObservation { get; set; }
+    public StatusServiceEnum Status { get; set; }
+    public int? RouteId { get; set; }
+    public virtual Route? Route { get; set; }
 }

@@ -13,7 +13,7 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company>
         builder.HasKey(c => c.Id);
 
         builder.HasMany(c => c.Adresses)
-            .WithOne()
+            .WithOne(a => a.Company)
             .IsRequired(false);
 
         builder.Property(c => c.PartnershipType)

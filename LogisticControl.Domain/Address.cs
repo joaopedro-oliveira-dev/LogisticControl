@@ -5,7 +5,7 @@ namespace LogisticControl.Domain;
 public class Address
 {
     public Address() { }
-    public Address(int id, string street, int number, string? complement, string neighborhood, string city, StateEnum state, int company_Id)
+    public Address(int id, string street, int number, string? complement, string neighborhood, string city, StateEnum state, int companyId)
     {
         this.Id = id;
         this.Street = street;
@@ -14,16 +14,16 @@ public class Address
         this.Neighborhood = neighborhood;
         this.City = city;
         this.State = state;
-        this.Company_Id = company_Id;
+        this.CompanyId = companyId;
     }
 
-    public int Id { get; private set; }
-    public string Street { get; private set; }
-    public int Number { get; private set; }
-    public string? Complement { get; private set; }
-    public string Neighborhood { get; private set; }
-    public string City { get; private set; }
-    public StateEnum State { get; private set; }
-    public int Company_Id { get; private set; } // Chave estrangeira
-    public Company Company { get; private set; } // Propriedade de navegação
+    public int Id { get; set; }
+    public string Street { get; set; }
+    public int Number { get; set; }
+    public string? Complement { get; set; }
+    public string Neighborhood { get; set; }
+    public string City { get; set; }
+    public StateEnum State { get; set; }
+    public virtual int CompanyId { get; set; } // Chave estrangeira
+    public virtual Company Company { get; set; } // Propriedade de navegação
 }

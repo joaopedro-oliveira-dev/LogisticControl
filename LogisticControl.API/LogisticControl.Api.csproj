@@ -19,4 +19,8 @@
     <ProjectReference Include="..\LogisticControl.Repository\LogisticControl.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

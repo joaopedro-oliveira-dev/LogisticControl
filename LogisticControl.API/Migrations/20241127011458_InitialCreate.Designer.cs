@@ -12,14 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogisticControl.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241114142354_EditTableNameAdressesToAddresses")]
-    partial class EditTableNameAdressesToAddresses
+    [Migration("20241127011458_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("api")
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -39,13 +40,9 @@ namespace LogisticControl.Api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("city");
 
-                    b.Property<int?>("CompanyId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("integer")
                         .HasColumnName("company_id");
-
-                    b.Property<int>("Company_Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("company__id");
 
                     b.Property<string>("Complement")
                         .HasColumnType("text")
@@ -76,10 +73,39 @@ namespace LogisticControl.Api.Migrations
                     b.HasIndex("CompanyId")
                         .HasDatabaseName("i_x_addresses_company_id");
 
-                    b.HasIndex("Company_Id")
-                        .HasDatabaseName("i_x_addresses_company__id");
+                    b.ToTable("addresses", "api");
 
-                    b.ToTable("addresses");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            City = "Pedro Leopoldo",
+                            CompanyId = 1,
+                            Neighborhood = "Manoel Carlos",
+                            Number = 560,
+                            State = "MG",
+                            Street = "Av. Lincoln Diogo Viana"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            City = "Belo Horizonte",
+                            CompanyId = 2,
+                            Neighborhood = "Olhos D'Água",
+                            Number = 255,
+                            State = "MG",
+                            Street = "R. São Vicente"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            City = "Lagoa Santa",
+                            CompanyId = 2,
+                            Neighborhood = "Vila Asas",
+                            Number = 333,
+                            State = "MG",
+                            Street = "R. das Goiabeiras"
+                        });
                 });
 
             modelBuilder.Entity("LogisticControl.Domain.Company", b =>
@@ -109,7 +135,23 @@ namespace LogisticControl.Api.Migrations
                     b.HasKey("Id")
                         .HasName("p_k_companies");
 
-                    b.ToTable("companies");
+                    b.ToTable("companies", "api");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mecbrun Industrial",
+                            PartnershipType = "Cliente",
+                            Phone = "(31) 96523-4789"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Geosol Geologia e Sondagens",
+                            PartnershipType = "Cliente",
+                            Phone = "(31) 99874-3642"
+                        });
                 });
 
             modelBuilder.Entity("LogisticControl.Domain.Driver", b =>
@@ -134,7 +176,27 @@ namespace LogisticControl.Api.Migrations
                     b.HasKey("Id")
                         .HasName("p_k_drivers");
 
-                    b.ToTable("drivers");
+                    b.ToTable("drivers", "api");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Amaro",
+                            Phone = "(31) 95648-7854"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Higor",
+                            Phone = "(31) 94756-5467"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Samuel",
+                            Phone = "(31) 98965-4756"
+                        });
                 });
 
             modelBuilder.Entity("LogisticControl.Domain.Route", b =>
@@ -150,12 +212,8 @@ namespace LogisticControl.Api.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("driver_id");
 
-                    b.Property<int?>("Driver_Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("driver__id");
-
                     b.Property<DateTime?>("Finalization")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("finalization");
 
                     b.Property<string>("Observation")
@@ -163,11 +221,11 @@ namespace LogisticControl.Api.Migrations
                         .HasColumnName("observation");
 
                     b.Property<DateTime>("Opening")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("opening");
 
                     b.Property<DateTime?>("Realization")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("realization");
 
                     b.Property<string>("Status")
@@ -181,10 +239,24 @@ namespace LogisticControl.Api.Migrations
                     b.HasIndex("DriverId")
                         .HasDatabaseName("i_x_routes_driver_id");
 
-                    b.HasIndex("Driver_Id")
-                        .HasDatabaseName("i_x_routes_driver__id");
+                    b.ToTable("routes", "api");
 
-                    b.ToTable("routes");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DriverId = 1,
+                            Finalization = new DateTime(2024, 11, 13, 7, 30, 0, 0, DateTimeKind.Unspecified),
+                            Opening = new DateTime(2024, 11, 12, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            Realization = new DateTime(2024, 11, 12, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "Finalizada"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Opening = new DateTime(2024, 11, 14, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "Pendente"
+                        });
                 });
 
             modelBuilder.Entity("LogisticControl.Domain.Service", b =>
@@ -196,9 +268,9 @@ namespace LogisticControl.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Adress_Id")
+                    b.Property<int?>("AdressId")
                         .HasColumnType("integer")
-                        .HasColumnName("adress__id");
+                        .HasColumnName("adress_id");
 
                     b.Property<string>("DriverObservation")
                         .HasColumnType("text")
@@ -216,13 +288,9 @@ namespace LogisticControl.Api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("responsible");
 
-                    b.Property<int>("RouteId")
+                    b.Property<int?>("RouteId")
                         .HasColumnType("integer")
                         .HasColumnName("route_id");
-
-                    b.Property<int?>("Route_Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("route__id");
 
                     b.Property<string>("ServiceType")
                         .IsRequired()
@@ -250,45 +318,82 @@ namespace LogisticControl.Api.Migrations
                     b.HasKey("Id")
                         .HasName("p_k_services");
 
-                    b.HasIndex("Adress_Id")
-                        .HasDatabaseName("i_x_services_adress__id");
+                    b.HasIndex("AdressId")
+                        .HasDatabaseName("i_x_services_adress_id");
 
                     b.HasIndex("RouteId")
                         .HasDatabaseName("i_x_services_route_id");
 
-                    b.HasIndex("Route_Id")
-                        .HasDatabaseName("i_x_services_route__id");
+                    b.ToTable("services", "api");
 
-                    b.ToTable("services");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AdressId = 1,
+                            Priority = "Alta",
+                            RouteId = 1,
+                            ServiceType = "Entrega",
+                            Status = "Realizado",
+                            StatusItem = "Liberado",
+                            Tracking = "2024/586",
+                            TrackingType = "NF"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AdressId = 2,
+                            Observation = "Material pesado",
+                            Priority = "Media",
+                            Responsible = "Carlos",
+                            RouteId = 1,
+                            ServiceType = "Coleta",
+                            Status = "NaoRealizado",
+                            StatusItem = "Liberado",
+                            Tracking = "547",
+                            TrackingType = "OS"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AdressId = 2,
+                            Priority = "Alta",
+                            RouteId = 2,
+                            ServiceType = "Entrega",
+                            Status = "EmAndamento",
+                            StatusItem = "Liberado",
+                            Tracking = "2024/587",
+                            TrackingType = "NF"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AdressId = 3,
+                            Priority = "Baixa",
+                            ServiceType = "Coleta",
+                            Status = "Pendente",
+                            StatusItem = "NaoLiberado",
+                            Tracking = "548",
+                            TrackingType = "OS"
+                        });
                 });
 
             modelBuilder.Entity("LogisticControl.Domain.Address", b =>
                 {
-                    b.HasOne("LogisticControl.Domain.Company", null)
+                    b.HasOne("LogisticControl.Domain.Company", "Company")
                         .WithMany("Adresses")
                         .HasForeignKey("CompanyId")
                         .HasConstraintName("f_k_addresses__companies_company_id");
-
-                    b.HasOne("LogisticControl.Domain.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("Company_Id")
-                        .IsRequired()
-                        .HasConstraintName("f_k_addresses__companies_company__id");
 
                     b.Navigation("Company");
                 });
 
             modelBuilder.Entity("LogisticControl.Domain.Route", b =>
                 {
-                    b.HasOne("LogisticControl.Domain.Driver", null)
+                    b.HasOne("LogisticControl.Domain.Driver", "Driver")
                         .WithMany("Routes")
                         .HasForeignKey("DriverId")
                         .HasConstraintName("f_k_routes_drivers_driver_id");
-
-                    b.HasOne("LogisticControl.Domain.Driver", "Driver")
-                        .WithMany()
-                        .HasForeignKey("Driver_Id")
-                        .HasConstraintName("f_k_routes_drivers_driver__id");
 
                     b.Navigation("Driver");
                 });
@@ -297,19 +402,13 @@ namespace LogisticControl.Api.Migrations
                 {
                     b.HasOne("LogisticControl.Domain.Address", "Adress")
                         .WithMany()
-                        .HasForeignKey("Adress_Id")
-                        .HasConstraintName("f_k_services_addresses_adress__id");
-
-                    b.HasOne("LogisticControl.Domain.Route", null)
-                        .WithMany("Services")
-                        .HasForeignKey("RouteId")
-                        .IsRequired()
-                        .HasConstraintName("f_k_services_routes_route_id");
+                        .HasForeignKey("AdressId")
+                        .HasConstraintName("f_k_services_addresses_adress_id");
 
                     b.HasOne("LogisticControl.Domain.Route", "Route")
-                        .WithMany()
-                        .HasForeignKey("Route_Id")
-                        .HasConstraintName("f_k_services_routes_route__id");
+                        .WithMany("Services")
+                        .HasForeignKey("RouteId")
+                        .HasConstraintName("f_k_services_routes_route_id");
 
                     b.Navigation("Adress");
 

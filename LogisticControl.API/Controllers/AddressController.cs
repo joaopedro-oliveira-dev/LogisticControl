@@ -57,7 +57,7 @@ public class AddressController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Post(Address domain)
+    public async Task<IActionResult> Post([FromBody] Address domain)
     {
         try
         {
@@ -76,7 +76,7 @@ public class AddressController : ControllerBase
         }
     }
     [HttpPut("{addressId}")]
-    public async Task<IActionResult> Put(int addressId, Address domain)
+    public async Task<IActionResult> Put(int addressId, [FromBody] Address domain)
     {
         try
         {

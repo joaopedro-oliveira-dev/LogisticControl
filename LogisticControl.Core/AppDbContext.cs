@@ -2,6 +2,7 @@
 using LogisticControl.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Reflection.Emit;
 using Route = LogisticControl.Domain.Route;
 
 namespace LogisticControl.Core;
@@ -26,6 +27,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.HasDefaultSchema("api");
         builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         foreach (var entity in builder.Model.GetEntityTypes())

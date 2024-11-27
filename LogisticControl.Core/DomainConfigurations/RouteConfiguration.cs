@@ -14,13 +14,11 @@ public class RouteConfiguration : IEntityTypeConfiguration<Route>
         builder.HasKey(r => r.Id);
 
         builder.HasOne(r => r.Driver)
-            .WithMany()
-            .HasForeignKey(r => r.Driver_Id)
+            .WithMany(a => a.Routes)
+            .HasForeignKey(r => r.DriverId)
             .IsRequired(false);
 
-        builder.HasMany(r => r.Services)
-            .WithOne()
-            .IsRequired();
+        builder.HasMany(r => r.Services);
 
         builder.Property(r => r.Status)
             .HasConversion(new EnumToStringConverter<StatusRouteEnum>());

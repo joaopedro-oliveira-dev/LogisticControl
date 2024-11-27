@@ -11,7 +11,7 @@ public class DriverConfiguration : IEntityTypeConfiguration<Driver>
         builder.HasKey(d => d.Id);
 
         builder.HasMany(d => d.Routes)
-            .WithOne()
+            .WithOne(a => a.Driver)
             .IsRequired(false);
 
         builder.HasData(new List<Driver>

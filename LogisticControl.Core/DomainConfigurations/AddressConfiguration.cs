@@ -13,12 +13,13 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address>
         builder.HasKey(a =>  a.Id);
 
         builder.HasOne(a => a.Company)
-            .WithMany()
-            .HasForeignKey(a => a.Company_Id)
+            .WithMany( a=> a.Adresses)
+            .HasForeignKey(a => a.CompanyId)
             .IsRequired();
 
         builder.Property(a => a.State)
             .HasConversion(new EnumToStringConverter<StateEnum>());
+        
 
         builder.HasData(new List<Address>
         {
@@ -26,5 +27,6 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address>
             new Address(2, "R. São Vicente", 255, null, "Olhos D'Água", "Belo Horizonte", StateEnum.MG, 2),
             new Address(3, "R. das Goiabeiras", 333, null, "Vila Asas", "Lagoa Santa", StateEnum.MG, 2),
         });
+        
     }
 }

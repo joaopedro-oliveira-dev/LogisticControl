@@ -1,6 +1,9 @@
 using LogisticControl.Core;
 using LogisticControl.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,19 +15,22 @@ IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.Deve
 builder.Services.AddDatabaseSettings(config);
 
 builder.Services.AddControllers()
-                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase)
-                .AddJsonOptions(options => options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase)
-                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNameCaseInsensitive = true)
-                .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+                .AddJsonOptions(options => {
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                options.JsonSerializerOptions.WriteIndented = true;
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                    }             
+                );
 
 builder.Services.AddControllersWithViews(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
-//.AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = 
-//Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 builder.Services.AddScoped<IRepository, Repository>();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -45,4 +51,25 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+ApplyMigration();
+
 app.Run();
+
+
+void ApplyMigration()
+{
+    using var scope = app.Services.CreateScope();
+
+    var database = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    if (database != null)
+    {
+        if (database.Database.GetPendingMigrations().Any())
+        {
+            database.Database.Migrate();
+        }
+
+    }
+
+}
+

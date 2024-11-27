@@ -12,13 +12,11 @@ public class ServiceConfiguration : IEntityTypeConfiguration<Service>
     {
         builder.HasKey(s => s.Id);
 
-        builder.HasOne(s => s.Adress)
-            .WithMany()
-            .HasForeignKey(s => s.Adress_Id);
+        builder.HasOne(s => s.Adress);
 
         builder.HasOne(s => s.Route)
             .WithMany(r => r.Services)
-            .HasForeignKey(s => s.Route_Id)
+            .HasForeignKey(s => s.RouteId)
             .IsRequired(false);
 
         builder.Property(s => s.ServiceType)

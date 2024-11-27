@@ -49,7 +49,7 @@ public class Repository : IRepository
             query = query.Include(a => a.Company);
         }
 
-        query = query.AsNoTracking().OrderBy(a => a.Id).Where(a => a.Company_Id == companyId);
+        query = query.AsNoTracking().OrderBy(a => a.Id).Where(a => a.CompanyId == companyId);
 
         return await query.ToArrayAsync();
     }

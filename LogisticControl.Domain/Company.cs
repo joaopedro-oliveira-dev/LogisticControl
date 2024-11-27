@@ -13,9 +13,10 @@ public class Company
         Phone = phone;
     }
 
-    public int Id { get; private set; }
-    public string Name { get; private set; }
-    public PartnershipTypeEnum PartnershipType { get; private set;}
-    public string Phone { get; private set; }
-    public ICollection<Address> Adresses { get; private set; } // Propriedade de coleção
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public PartnershipTypeEnum PartnershipType { get; set;
+    }
+    public string Phone { get; set; }
+    public virtual ICollection<Address> Adresses { get; set; } // Propriedade de coleção
 }
