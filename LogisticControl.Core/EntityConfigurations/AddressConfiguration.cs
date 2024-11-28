@@ -1,10 +1,10 @@
-﻿using LogisticControl.Domain;
-using LogisticControl.Domain.Enums;
+﻿using LogisticControl.Domain.Enums;
+using LogisticControl.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace LogisticControl.Core.DomainConfigurations;
+namespace LogisticControl.Core.EntityConfigurations;
 
 public class AddressConfiguration : IEntityTypeConfiguration<Address>
 {
@@ -13,7 +13,7 @@ public class AddressConfiguration : IEntityTypeConfiguration<Address>
         builder.HasKey(a =>  a.Id);
 
         builder.HasOne(a => a.Company)
-            .WithMany( a=> a.Adresses)
+            .WithMany( c=> c.Addresses)
             .HasForeignKey(a => a.CompanyId)
             .IsRequired();
 

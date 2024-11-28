@@ -1,10 +1,10 @@
-﻿using LogisticControl.Domain;
-using LogisticControl.Domain.Enums;
+﻿using LogisticControl.Domain.Enums;
+using LogisticControl.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace LogisticControl.Core.DomainConfigurations;
+namespace LogisticControl.Core.EntityConfigurations;
 
 public class ServiceConfiguration : IEntityTypeConfiguration<Service>
 {
@@ -12,7 +12,7 @@ public class ServiceConfiguration : IEntityTypeConfiguration<Service>
     {
         builder.HasKey(s => s.Id);
 
-        builder.HasOne(s => s.Adress);
+        builder.HasOne(s => s.Address);
 
         builder.HasOne(s => s.Route)
             .WithMany(r => r.Services)

@@ -1,16 +1,16 @@
 ﻿using LogisticControl.Domain.Enums;
 
-namespace LogisticControl.Domain;
+namespace LogisticControl.Domain.Models;
 
 public class Service
 {
     public Service() { }
-    public Service(int id, ServiceTypeEnum serviceType, int? adress_Id, PriorityEnum? priority, TrackingTypeEnum? trackingType, string? tracking, 
+    public Service(int id, ServiceTypeEnum serviceType, int? adress_Id, PriorityEnum? priority, TrackingTypeEnum? trackingType, string? tracking,
         string? observation, StatusItemEnum statusItem, string? responsible, string? driverObservation, StatusServiceEnum status, int? routeId)
     {
         Id = id;
         ServiceType = serviceType;
-        AdressId = adress_Id;
+        AddressId = adress_Id;
         Priority = priority;
         TrackingType = trackingType;
         Tracking = tracking;
@@ -24,8 +24,8 @@ public class Service
 
     public int Id { get; set; }
     public ServiceTypeEnum ServiceType { get; set; }
-    public int? AdressId { get; set; }
-    public virtual Address? Adress {  get; set; }
+    public int? AddressId { get; set; }
+    public virtual Address? Address { get; set; }
     public PriorityEnum? Priority { get; set; }
     public TrackingTypeEnum? TrackingType { get; set; }
     public string? Tracking { get; set; }

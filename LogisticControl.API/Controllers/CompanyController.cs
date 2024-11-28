@@ -1,5 +1,4 @@
-﻿using LogisticControl.Domain;
-using LogisticControl.Domain.Models;
+﻿using LogisticControl.Domain.Models;
 using LogisticControl.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,11 +6,11 @@ namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AddressController : ControllerBase
+public class CompanyController : ControllerBase
 {
     private readonly IRepository _repo;
-    
-    public AddressController(IRepository repo) 
+
+    public CompanyController(IRepository repo)
     {
         _repo = repo;
     }
@@ -21,7 +20,7 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetAllAddressesAsync(true);
+            var result = await _repo.GetAllCompaniesAsync(true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -29,27 +28,25 @@ public class AddressController : ControllerBase
             return BadRequest($"Erro: {ex.Message}");
         }
     }
-
-    [HttpGet("{addressId}")]
-    public async Task<IActionResult> GetByAddressId(int addressId)
-    {
-        try
-        {
-            var result = await _repo.GetAddressAsyncById(addressId, true);
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"Erro: {ex.Message}");
-        }
-    }
-
-    [HttpGet("company/{companyId}")]
+    [HttpGet("{companyId}")]
     public async Task<IActionResult> GetByCompanyId(int companyId)
     {
         try
         {
-            var result = await _repo.GetAddressesAsyncByCompanyId(companyId, true);
+            var result = await _repo.GetCompanyAsyncById(companyId, true);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Erro: {ex.Message}");
+        }
+    }
+    [HttpGet("address/{addressId}")]
+    public async Task<IActionResult> GetByAddressId(int addressId)
+    {
+        try
+        {
+            var result = await _repo.GetCompanyAsyncByAddressId(addressId, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -58,13 +55,13 @@ public class AddressController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Address model)
+    public async Task<IActionResult> Post([FromBody] Company model)
     {
         try
         {
             _repo.Add(model);
 
-            if(await _repo.SaveChangesAsync())
+            if (await _repo.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -76,19 +73,19 @@ public class AddressController : ControllerBase
             return BadRequest($"Erro: {ex.Message}");
         }
     }
-    [HttpPut("{addressId}")]
-    public async Task<IActionResult> Put(int addressId, [FromBody] Address model)
+    [HttpPut("{companyId}")]
+    public async Task<IActionResult> Put(int companyId, [FromBody] Company model)
     {
         try
         {
-            if (addressId != model.Id) return BadRequest();
-            
-            var address = await _repo.GetAddressAsyncById(addressId);
-            if (address == null) return NotFound();
+            if (companyId != model.Id) return BadRequest();
+
+            var company = await _repo.GetCompanyAsyncById(companyId);
+            if (company == null) return NotFound();
 
             _repo.Update(model);
 
-            if (await _repo.SaveChangesAsync()) 
+            if (await _repo.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -100,12 +97,12 @@ public class AddressController : ControllerBase
             return BadRequest($"Erro: {ex.Message}");
         }
     }
-    [HttpDelete("{addressId}")]
-    public async Task<IActionResult> Delete(int addressId)
+    [HttpDelete("{companyId}")]
+    public async Task<IActionResult> Delete(int companyId)
     {
         try
         {
-            var address = await _repo.GetAddressAsyncById(addressId);
+            var address = await _repo.GetCompanyAsyncById(companyId);
             if (address == null) return NotFound();
 
             _repo.Delete(address);

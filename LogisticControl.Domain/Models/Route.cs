@@ -1,6 +1,6 @@
 ﻿using LogisticControl.Domain.Enums;
 
-namespace LogisticControl.Domain;
+namespace LogisticControl.Domain.Models;
 
 public class Route
 {

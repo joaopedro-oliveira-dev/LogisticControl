@@ -1,8 +1,8 @@
-﻿using LogisticControl.Domain;
+﻿using LogisticControl.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace LogisticControl.Core.DomainConfigurations;
+namespace LogisticControl.Core.EntityConfigurations;
 
 public class DriverConfiguration : IEntityTypeConfiguration<Driver>
 {
@@ -11,7 +11,7 @@ public class DriverConfiguration : IEntityTypeConfiguration<Driver>
         builder.HasKey(d => d.Id);
 
         builder.HasMany(d => d.Routes)
-            .WithOne(a => a.Driver)
+            .WithOne(r => r.Driver)
             .IsRequired(false);
 
         builder.HasData(new List<Driver>

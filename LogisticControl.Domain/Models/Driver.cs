@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace LogisticControl.Domain;
+namespace LogisticControl.Domain.Models;
 
 public class Driver
 {

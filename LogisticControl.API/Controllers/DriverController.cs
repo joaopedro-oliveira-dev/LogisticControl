@@ -1,5 +1,4 @@
-﻿using LogisticControl.Domain;
-using LogisticControl.Domain.Models;
+﻿using LogisticControl.Domain.Models;
 using LogisticControl.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,11 +6,11 @@ namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AddressController : ControllerBase
+public class DriverController : ControllerBase
 {
     private readonly IRepository _repo;
-    
-    public AddressController(IRepository repo) 
+
+    public DriverController(IRepository repo)
     {
         _repo = repo;
     }
@@ -21,7 +20,7 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetAllAddressesAsync(true);
+            var result = await _repo.GetAllDriversAsync(true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -30,12 +29,12 @@ public class AddressController : ControllerBase
         }
     }
 
-    [HttpGet("{addressId}")]
-    public async Task<IActionResult> GetByAddressId(int addressId)
+    [HttpGet("{driverId}")]
+    public async Task<IActionResult> GetByDriverId(int driverId)
     {
         try
         {
-            var result = await _repo.GetAddressAsyncById(addressId, true);
+            var result = await _repo.GetDriverAsyncById(driverId, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -44,12 +43,12 @@ public class AddressController : ControllerBase
         }
     }
 
-    [HttpGet("company/{companyId}")]
-    public async Task<IActionResult> GetByCompanyId(int companyId)
+    [HttpGet("route/{routeId}")]
+    public async Task<IActionResult> GetByCompanyId(int routeId)
     {
         try
         {
-            var result = await _repo.GetAddressesAsyncByCompanyId(companyId, true);
+            var result = await _repo.GetDriverAsyncByRouteId(routeId, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -58,13 +57,13 @@ public class AddressController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Address model)
+    public async Task<IActionResult> Post([FromBody] Driver model)
     {
         try
         {
             _repo.Add(model);
 
-            if(await _repo.SaveChangesAsync())
+            if (await _repo.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -76,19 +75,19 @@ public class AddressController : ControllerBase
             return BadRequest($"Erro: {ex.Message}");
         }
     }
-    [HttpPut("{addressId}")]
-    public async Task<IActionResult> Put(int addressId, [FromBody] Address model)
+    [HttpPut("{driverId}")]
+    public async Task<IActionResult> Put(int driverId, [FromBody] Driver model)
     {
         try
         {
-            if (addressId != model.Id) return BadRequest();
-            
-            var address = await _repo.GetAddressAsyncById(addressId);
+            if (driverId != model.Id) return BadRequest();
+
+            var address = await _repo.GetDriverAsyncById(driverId);
             if (address == null) return NotFound();
 
             _repo.Update(model);
 
-            if (await _repo.SaveChangesAsync()) 
+            if (await _repo.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -100,12 +99,12 @@ public class AddressController : ControllerBase
             return BadRequest($"Erro: {ex.Message}");
         }
     }
-    [HttpDelete("{addressId}")]
-    public async Task<IActionResult> Delete(int addressId)
+    [HttpDelete("{driverId}")]
+    public async Task<IActionResult> Delete(int driverId)
     {
         try
         {
-            var address = await _repo.GetAddressAsyncById(addressId);
+            var address = await _repo.GetDriverAsyncById(driverId);
             if (address == null) return NotFound();
 
             _repo.Delete(address);

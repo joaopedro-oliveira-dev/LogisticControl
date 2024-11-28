@@ -268,7 +268,7 @@ namespace LogisticControl.Api.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AdressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("integer")
                         .HasColumnName("adress_id");
 
@@ -318,7 +318,7 @@ namespace LogisticControl.Api.Migrations
                     b.HasKey("Id")
                         .HasName("p_k_services");
 
-                    b.HasIndex("AdressId")
+                    b.HasIndex("AddressId")
                         .HasDatabaseName("i_x_services_adress_id");
 
                     b.HasIndex("RouteId")
@@ -330,7 +330,7 @@ namespace LogisticControl.Api.Migrations
                         new
                         {
                             Id = 1,
-                            AdressId = 1,
+                            AddressId = 1,
                             Priority = "Alta",
                             RouteId = 1,
                             ServiceType = "Entrega",
@@ -342,7 +342,7 @@ namespace LogisticControl.Api.Migrations
                         new
                         {
                             Id = 2,
-                            AdressId = 2,
+                            AddressId = 2,
                             Observation = "Material pesado",
                             Priority = "Media",
                             Responsible = "Carlos",
@@ -356,7 +356,7 @@ namespace LogisticControl.Api.Migrations
                         new
                         {
                             Id = 3,
-                            AdressId = 2,
+                            AddressId = 2,
                             Priority = "Alta",
                             RouteId = 2,
                             ServiceType = "Entrega",
@@ -368,7 +368,7 @@ namespace LogisticControl.Api.Migrations
                         new
                         {
                             Id = 4,
-                            AdressId = 3,
+                            AddressId = 3,
                             Priority = "Baixa",
                             ServiceType = "Coleta",
                             Status = "Pendente",
@@ -381,7 +381,7 @@ namespace LogisticControl.Api.Migrations
             modelBuilder.Entity("LogisticControl.Domain.Address", b =>
                 {
                     b.HasOne("LogisticControl.Domain.Company", "Company")
-                        .WithMany("Adresses")
+                        .WithMany("Addresses")
                         .HasForeignKey("CompanyId")
                         .HasConstraintName("f_k_addresses__companies_company_id");
 
@@ -400,9 +400,9 @@ namespace LogisticControl.Api.Migrations
 
             modelBuilder.Entity("LogisticControl.Domain.Service", b =>
                 {
-                    b.HasOne("LogisticControl.Domain.Address", "Adress")
+                    b.HasOne("LogisticControl.Domain.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AdressId")
+                        .HasForeignKey("AddressId")
                         .HasConstraintName("f_k_services_addresses_adress_id");
 
                     b.HasOne("LogisticControl.Domain.Route", "Route")
@@ -410,14 +410,14 @@ namespace LogisticControl.Api.Migrations
                         .HasForeignKey("RouteId")
                         .HasConstraintName("f_k_services_routes_route_id");
 
-                    b.Navigation("Adress");
+                    b.Navigation("Address");
 
                     b.Navigation("Route");
                 });
 
             modelBuilder.Entity("LogisticControl.Domain.Company", b =>
                 {
-                    b.Navigation("Adresses");
+                    b.Navigation("Addresses");
                 });
 
             modelBuilder.Entity("LogisticControl.Domain.Driver", b =>

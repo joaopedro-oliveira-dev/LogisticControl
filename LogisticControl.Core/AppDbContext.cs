@@ -1,9 +1,9 @@
 ﻿using LogisticControl.Core.Helpers;
-using LogisticControl.Domain;
+using LogisticControl.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Reflection.Emit;
-using Route = LogisticControl.Domain.Route;
+using Route = LogisticControl.Domain.Models.Route;
 
 namespace LogisticControl.Core;
 

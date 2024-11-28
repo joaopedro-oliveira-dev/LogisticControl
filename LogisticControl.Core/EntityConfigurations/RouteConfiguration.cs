@@ -1,11 +1,10 @@
-﻿using LogisticControl.Domain;
-using LogisticControl.Domain.Enums;
+﻿using LogisticControl.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Route = LogisticControl.Domain.Route;
+using Route = LogisticControl.Domain.Models.Route;
 
-namespace LogisticControl.Core.DomainConfigurations;
+namespace LogisticControl.Core.EntityConfigurations;
 
 public class RouteConfiguration : IEntityTypeConfiguration<Route>
 {
@@ -14,7 +13,7 @@ public class RouteConfiguration : IEntityTypeConfiguration<Route>
         builder.HasKey(r => r.Id);
 
         builder.HasOne(r => r.Driver)
-            .WithMany(a => a.Routes)
+            .WithMany(d => d.Routes)
             .HasForeignKey(r => r.DriverId)
             .IsRequired(false);
 

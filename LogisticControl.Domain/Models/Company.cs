@@ -1,6 +1,6 @@
 ﻿using LogisticControl.Domain.Enums;
 
-namespace LogisticControl.Domain;
+namespace LogisticControl.Domain.Models;
 
 public class Company
 {
@@ -15,8 +15,10 @@ public class Company
 
     public int Id { get; set; }
     public string Name { get; set; }
-    public PartnershipTypeEnum PartnershipType { get; set;
+    public PartnershipTypeEnum PartnershipType
+    {
+        get; set;
     }
     public string Phone { get; set; }
-    public virtual ICollection<Address> Adresses { get; set; } // Propriedade de coleção
+    public virtual ICollection<Address> Addresses { get; set; } // Propriedade de coleção
 }

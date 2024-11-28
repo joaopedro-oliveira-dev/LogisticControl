@@ -1,5 +1,4 @@
-﻿using LogisticControl.Domain;
-using LogisticControl.Domain.Models;
+﻿using LogisticControl.Domain.Models;
 using LogisticControl.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,11 +6,11 @@ namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AddressController : ControllerBase
+public class ServiceController : ControllerBase
 {
     private readonly IRepository _repo;
-    
-    public AddressController(IRepository repo) 
+
+    public ServiceController(IRepository repo)
     {
         _repo = repo;
     }
@@ -21,7 +20,7 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetAllAddressesAsync(true);
+            var result = await _repo.GetAllServicesAsync(true, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -30,12 +29,26 @@ public class AddressController : ControllerBase
         }
     }
 
-    [HttpGet("{addressId}")]
+    [HttpGet("{serviceId}")]
+    public async Task<IActionResult> GetByServiceId(int serviceId)
+    {
+        try
+        {
+            var result = await _repo.GetServiceAsyncById(serviceId, true, true);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Erro: {ex.Message}");
+        }
+    }
+
+    [HttpGet("address/{addressId}")]
     public async Task<IActionResult> GetByAddressId(int addressId)
     {
         try
         {
-            var result = await _repo.GetAddressAsyncById(addressId, true);
+            var result = await _repo.GetServicesAsyncByAddressId(addressId, true, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -43,13 +56,12 @@ public class AddressController : ControllerBase
             return BadRequest($"Erro: {ex.Message}");
         }
     }
-
-    [HttpGet("company/{companyId}")]
-    public async Task<IActionResult> GetByCompanyId(int companyId)
+    [HttpGet("route/{routeId}")]
+    public async Task<IActionResult> GetByRouteId(int routeId)
     {
         try
         {
-            var result = await _repo.GetAddressesAsyncByCompanyId(companyId, true);
+            var result = await _repo.GetServicesAsyncByRouteId(routeId, true, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -58,13 +70,13 @@ public class AddressController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Address model)
+    public async Task<IActionResult> Post([FromBody] Service model)
     {
         try
         {
             _repo.Add(model);
 
-            if(await _repo.SaveChangesAsync())
+            if (await _repo.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -76,19 +88,19 @@ public class AddressController : ControllerBase
             return BadRequest($"Erro: {ex.Message}");
         }
     }
-    [HttpPut("{addressId}")]
-    public async Task<IActionResult> Put(int addressId, [FromBody] Address model)
+    [HttpPut("{serviceId}")]
+    public async Task<IActionResult> Put(int serviceId, [FromBody] Service model)
     {
         try
         {
-            if (addressId != model.Id) return BadRequest();
-            
-            var address = await _repo.GetAddressAsyncById(addressId);
-            if (address == null) return NotFound();
+            if (serviceId != model.Id) return BadRequest();
+
+            var service = await _repo.GetServiceAsyncById(serviceId);
+            if (service == null) return NotFound();
 
             _repo.Update(model);
 
-            if (await _repo.SaveChangesAsync()) 
+            if (await _repo.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -100,15 +112,15 @@ public class AddressController : ControllerBase
             return BadRequest($"Erro: {ex.Message}");
         }
     }
-    [HttpDelete("{addressId}")]
-    public async Task<IActionResult> Delete(int addressId)
+    [HttpDelete("{serviceId}")]
+    public async Task<IActionResult> Delete(int serviceId)
     {
         try
         {
-            var address = await _repo.GetAddressAsyncById(addressId);
-            if (address == null) return NotFound();
+            var service = await _repo.GetServiceAsyncById(serviceId);
+            if (service == null) return NotFound();
 
-            _repo.Delete(address);
+            _repo.Delete(service);
 
             if (await _repo.SaveChangesAsync())
             {
