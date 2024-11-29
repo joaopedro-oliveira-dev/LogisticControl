@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticControl.Api", "LogisticControl.Api.csproj", "{ECA230A5-695C-4FB1-B0DC-CEA3F6D3FE2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticControl.Core", "LogisticControl.Core\LogisticControl.Core.csproj", "{695B4FC5-7548-4CC1-870D-CE894C196AA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticControl.Core", "LogisticControl.Core\LogisticControl.Core.csproj", "{695B4FC5-7548-4CC1-870D-CE894C196AA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticControl.Repository", "LogisticControl.Repository\LogisticControl.Repository.csproj", "{41294649-55A6-40E8-A008-9FF900CB6C25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticControl.Repository", "LogisticControl.Repository\LogisticControl.Repository.csproj", "{41294649-55A6-40E8-A008-9FF900CB6C25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticControl.Services", "LogisticControl.Services\LogisticControl.Services.csproj", "{0A75DA70-91C3-4A07-8361-3E73A976CD60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticControl.Services", "LogisticControl.Services\LogisticControl.Services.csproj", "{0A75DA70-91C3-4A07-8361-3E73A976CD60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticControl.Domain", "LogisticControl.Domain\LogisticControl.Domain.csproj", "{68E3119C-18F0-4FF4-8CDF-D7D7ACF1B2AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticControl.Domain", "LogisticControl.Domain\LogisticControl.Domain.csproj", "{68E3119C-18F0-4FF4-8CDF-D7D7ACF1B2AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticControl.Api", "LogisticControl.API\LogisticControl.Api.csproj", "{4980B256-0BBB-4DE5-A756-B48B9380BE6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ECA230A5-695C-4FB1-B0DC-CEA3F6D3FE2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ECA230A5-695C-4FB1-B0DC-CEA3F6D3FE2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ECA230A5-695C-4FB1-B0DC-CEA3F6D3FE2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ECA230A5-695C-4FB1-B0DC-CEA3F6D3FE2B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{695B4FC5-7548-4CC1-870D-CE894C196AA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{695B4FC5-7548-4CC1-870D-CE894C196AA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{695B4FC5-7548-4CC1-870D-CE894C196AA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{68E3119C-18F0-4FF4-8CDF-D7D7ACF1B2AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68E3119C-18F0-4FF4-8CDF-D7D7ACF1B2AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68E3119C-18F0-4FF4-8CDF-D7D7ACF1B2AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4980B256-0BBB-4DE5-A756-B48B9380BE6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4980B256-0BBB-4DE5-A756-B48B9380BE6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4980B256-0BBB-4DE5-A756-B48B9380BE6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4980B256-0BBB-4DE5-A756-B48B9380BE6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
