@@ -1,5 +1,5 @@
 ﻿using LogisticControl.Domain.Models;
-using LogisticControl.Repository;
+using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
@@ -8,11 +8,11 @@ namespace LogisticControl.Api.Controllers;
 [Route("[controller]")]
 public class CompanyController : ControllerBase
 {
-    private readonly IRepository _repo;
+    private readonly ICompanyService _companyService;
 
-    public CompanyController(IRepository repo)
+    public CompanyController(ICompanyService companyService)
     {
-        _repo = repo;
+        _companyService = companyService;
     }
 
     [HttpGet]
@@ -20,7 +20,7 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetAllCompaniesAsync(true);
+            var result = await _companyService.GetAllCompaniesAsync(true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -33,7 +33,7 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetCompanyAsyncById(companyId, true);
+            var result = await _companyService.GetCompanyAsyncById(companyId, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -46,7 +46,7 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetCompanyAsyncByAddressId(addressId, true);
+            var result = await _companyService.GetCompanyAsyncByAddressId(addressId, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -59,9 +59,9 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            _repo.Add(model);
+            _companyService.Add(model);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _companyService.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -80,12 +80,12 @@ public class CompanyController : ControllerBase
         {
             if (companyId != model.Id) return BadRequest();
 
-            var company = await _repo.GetCompanyAsyncById(companyId);
+            var company = await _companyService.GetCompanyAsyncById(companyId);
             if (company == null) return NotFound();
 
-            _repo.Update(model);
+            _companyService.Update(model);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _companyService.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -102,12 +102,12 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var address = await _repo.GetCompanyAsyncById(companyId);
+            var address = await _companyService.GetCompanyAsyncById(companyId);
             if (address == null) return NotFound();
 
-            _repo.Delete(address);
+            _companyService.Delete(address);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _companyService.SaveChangesAsync())
             {
                 return Ok("Deletado");
             }

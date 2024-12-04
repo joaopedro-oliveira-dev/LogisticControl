@@ -1,5 +1,5 @@
 ﻿using LogisticControl.Domain.Models;
-using LogisticControl.Repository;
+using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
@@ -8,11 +8,11 @@ namespace LogisticControl.Api.Controllers;
 [Route("[controller]")]
 public class DriverController : ControllerBase
 {
-    private readonly IRepository _repo;
+    private readonly IDriverService _driverService;
 
-    public DriverController(IRepository repo)
+    public DriverController(IDriverService driverService)
     {
-        _repo = repo;
+        _driverService = driverService;
     }
 
     [HttpGet]
@@ -20,7 +20,7 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetAllDriversAsync(true);
+            var result = await _driverService.GetAllDriversAsync(true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -34,7 +34,7 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetDriverAsyncById(driverId, true);
+            var result = await _driverService.GetDriverAsyncById(driverId, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -48,7 +48,7 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetDriverAsyncByRouteId(routeId, true);
+            var result = await _driverService.GetDriverAsyncByRouteId(routeId, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -61,9 +61,9 @@ public class DriverController : ControllerBase
     {
         try
         {
-            _repo.Add(model);
+            _driverService.Add(model);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _driverService.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -82,12 +82,12 @@ public class DriverController : ControllerBase
         {
             if (driverId != model.Id) return BadRequest();
 
-            var address = await _repo.GetDriverAsyncById(driverId);
+            var address = await _driverService.GetDriverAsyncById(driverId);
             if (address == null) return NotFound();
 
-            _repo.Update(model);
+            _driverService.Update(model);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _driverService.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -104,12 +104,12 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var address = await _repo.GetDriverAsyncById(driverId);
+            var address = await _driverService.GetDriverAsyncById(driverId);
             if (address == null) return NotFound();
 
-            _repo.Delete(address);
+            _driverService.Delete(address);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _driverService.SaveChangesAsync())
             {
                 return Ok("Deletado");
             }
