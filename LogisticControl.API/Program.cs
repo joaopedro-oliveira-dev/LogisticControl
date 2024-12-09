@@ -31,11 +31,11 @@ builder.Services.AddControllers()
 builder.Services.AddControllersWithViews(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
 builder.Services.AddScoped<IBaseRepository, BaseRepository>();
-builder.Services.AddTransient<IAddressRepository, AddressRepository>();
-builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
-builder.Services.AddTransient<IDriverRepository, DriverRepository>();
-builder.Services.AddTransient<IRouteRepository, RouteRepository>();
-builder.Services.AddTransient<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+builder.Services.AddScoped<IRouteRepository, RouteRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 
 builder.Services.AddTransient<IAddressService, AddressService>();
 builder.Services.AddTransient<ICompanyService, CompanyService>();
