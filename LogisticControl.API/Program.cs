@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Scalar.AspNetCore;
+using LogisticControl.Core.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,8 @@ builder.Services.AddTransient<ICompanyService, CompanyService>();
 builder.Services.AddTransient<IDriverService, DriverService>();
 builder.Services.AddTransient<IRouteService, RouteService>();
 builder.Services.AddTransient<IServiceService, ServiceService>();
+
+builder.Services.AddAutoMapper(typeof(ConfigurationMapping));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

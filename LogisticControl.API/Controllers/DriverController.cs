@@ -1,4 +1,6 @@
-﻿using LogisticControl.Domain.Models;
+﻿using AutoMapper;
+using LogisticControl.Domain.DTOs;
+using LogisticControl.Domain.Models;
 using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace LogisticControl.Api.Controllers;
 public class DriverController : ControllerBase
 {
     private readonly IDriverService _driverService;
+    private readonly IMapper _mapper;
 
-    public DriverController(IDriverService driverService)
+    public DriverController(IDriverService driverService, IMapper mapper)
     {
         _driverService = driverService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -57,10 +61,11 @@ public class DriverController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Driver model)
+    public async Task<IActionResult> Post([FromBody] DriverPostDTO modelDTO)
     {
         try
         {
+            Driver model = _mapper.Map<Driver>(modelDTO);
             _driverService.Add(model);
 
             if (await _driverService.SaveChangesAsync())
@@ -76,20 +81,19 @@ public class DriverController : ControllerBase
         }
     }
     [HttpPut("{driverId}")]
-    public async Task<IActionResult> Put(int driverId, [FromBody] Driver model)
+    public async Task<IActionResult> Put(int driverId, [FromBody] DriverPutDTO modelDTO)
     {
         try
         {
-            if (driverId != model.Id) return BadRequest();
+            Driver driver = await _driverService.GetDriverAsyncById(driverId);
+            if (driver == null) return NotFound();
 
-            var address = await _driverService.GetDriverAsyncById(driverId);
-            if (address == null) return NotFound();
-
-            _driverService.Update(model);
+            _mapper.Map(modelDTO, driver);
+            _driverService.Update(driver);
 
             if (await _driverService.SaveChangesAsync())
             {
-                return Ok(model);
+                return Ok(driver);
             }
 
             return BadRequest();

@@ -1,4 +1,5 @@
-﻿using LogisticControl.Domain.Models;
+﻿using LogisticControl.Domain.Enums;
+using LogisticControl.Domain.Models;
 using LogisticControl.Repository.Interfaces;
 using LogisticControl.Services.Interfaces;
 
@@ -19,6 +20,7 @@ public class ServiceService : IServiceService
     {
         try
         {
+            entity.Status = StatusServiceEnum.Pendente;
             _baseRepository.Add(entity);
         }
         catch(Exception ex)

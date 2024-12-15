@@ -1,4 +1,6 @@
-﻿using LogisticControl.Domain.Models;
+﻿using AutoMapper;
+using LogisticControl.Domain.DTOs;
+using LogisticControl.Domain.Models;
 using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace LogisticControl.Api.Controllers;
 public class AddressController : ControllerBase
 {
     private readonly IAddressService _addressService;
+    private readonly IMapper _mapper;
     
-    public AddressController(IAddressService addressService) 
+    public AddressController(IAddressService addressService, IMapper mapper) 
     {
         _addressService = addressService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -57,10 +61,11 @@ public class AddressController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Address model)
+    public async Task<IActionResult> Post([FromBody] AddressPostDTO modelDTO)
     {
         try
         {
+            Address model = _mapper.Map<Address>(modelDTO);
             _addressService.Add(model);
 
             if(await _addressService.SaveChangesAsync())
@@ -76,20 +81,20 @@ public class AddressController : ControllerBase
         }
     }
     [HttpPut("{addressId}")]
-    public async Task<IActionResult> Put(int addressId, [FromBody] Address model)
+    public async Task<IActionResult> Put(int addressId, [FromBody] AddressPutDTO modelDTO)
     {
         try
         {
-            if (addressId != model.Id) return BadRequest();
-            
-            var address = await _addressService.GetAddressAsyncById(addressId);
+            Address address = await _addressService.GetAddressAsyncById(addressId);
             if (address == null) return NotFound();
 
-            _addressService.Update(model);
+            _mapper.Map(modelDTO, address);
+
+            _addressService.Update(address);
 
             if (await _addressService.SaveChangesAsync()) 
             {
-                return Ok(model);
+                return Ok(address);
             }
 
             return BadRequest();
