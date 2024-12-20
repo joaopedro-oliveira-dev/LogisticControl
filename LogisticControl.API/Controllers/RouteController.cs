@@ -24,7 +24,12 @@ public class RouteController : ControllerBase
         try
         {
             var result = await _routeService.GetAllRoutesAsync(true, true);
-            return Ok(result);
+            var resultDTO = new List<RouteGetDTO>();
+            foreach (var route in result)
+            {
+                resultDTO.Add(_mapper.Map<RouteGetDTO>(route));
+            }
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -38,7 +43,8 @@ public class RouteController : ControllerBase
         try
         {
             var result = await _routeService.GetRouteAsyncById(routeId, true, true);
-            return Ok(result);
+            var resultDTO = _mapper.Map<RouteGetDTO>(result);
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -52,7 +58,12 @@ public class RouteController : ControllerBase
         try
         {
             var result = await _routeService.GetRoutesAsyncByDriverId(driverId, true, true);
-            return Ok(result);
+            var resultDTO = new List<RouteGetDTO>();
+            foreach (var route in result)
+            {
+                resultDTO.Add(_mapper.Map<RouteGetDTO>(route));
+            }
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -65,7 +76,8 @@ public class RouteController : ControllerBase
         try
         {
             var result = await _routeService.GetRouteAsyncByServiceId(serviceId, true, true);
-            return Ok(result);
+            var resultDTO = _mapper.Map<RouteGetDTO>(result);
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -80,9 +92,11 @@ public class RouteController : ControllerBase
             Route model = _mapper.Map<Route>(modelDTO);
             _routeService.Add(model);
 
+            var resultDTO = _mapper.Map<RouteGetDTO>(model);
+
             if (await _routeService.SaveChangesAsync())
             {
-                return Ok(model);
+                return Ok(resultDTO);
             }
 
             return BadRequest();
@@ -103,9 +117,11 @@ public class RouteController : ControllerBase
             _mapper.Map(modelDTO, route);
             _routeService.Update(route);
 
+            var resultDTO = _mapper.Map<RouteGetDTO>(route);
+
             if (await _routeService.SaveChangesAsync())
             {
-                return Ok(route);
+                return Ok(resultDTO);
             }
 
             return BadRequest();

@@ -25,7 +25,14 @@ public class CompanyController : ControllerBase
         try
         {
             var result = await _companyService.GetAllCompaniesAsync(true);
-            return Ok(result);
+            
+            var resultDTO = new List<CompanyGetDTO>();
+            foreach (var company in result)
+            {
+                resultDTO.Add(_mapper.Map<CompanyGetDTO>(company));
+            }
+
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -38,7 +45,10 @@ public class CompanyController : ControllerBase
         try
         {
             var result = await _companyService.GetCompanyAsyncById(companyId, true);
-            return Ok(result);
+            
+            var resultDTO = _mapper.Map<CompanyGetDTO>(result);
+
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -51,7 +61,10 @@ public class CompanyController : ControllerBase
         try
         {
             var result = await _companyService.GetCompanyAsyncByAddressId(addressId, true);
-            return Ok(result);
+
+            var resultDTO = _mapper.Map<CompanyGetDTO>(result);
+
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -66,9 +79,11 @@ public class CompanyController : ControllerBase
             Company model = _mapper.Map<Company>(modelDTO);
             _companyService.Add(model);
 
+            var resultDTO = _mapper.Map<CompanyGetDTO>(model);
+
             if (await _companyService.SaveChangesAsync())
             {
-                return Ok(model);
+                return Ok(resultDTO);
             }
 
             return BadRequest();
@@ -89,9 +104,11 @@ public class CompanyController : ControllerBase
             _mapper.Map(modelDTO, company);
             _companyService.Update(company);
 
+            var resultDTO = _mapper.Map<CompanyGetDTO>(company);
+
             if (await _companyService.SaveChangesAsync())
             {
-                return Ok(company);
+                return Ok(resultDTO);
             }
 
             return BadRequest();

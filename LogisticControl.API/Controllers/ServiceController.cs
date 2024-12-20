@@ -25,7 +25,12 @@ public class ServiceController : ControllerBase
         try
         {
             var result = await _serviceService.GetAllServicesAsync(true, true);
-            return Ok(result);
+            var resultDTO = new List<ServiceGetDTO>();
+            foreach (var service in result)
+            {
+                resultDTO.Add(_mapper.Map<ServiceGetDTO>(service));
+            }
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -39,7 +44,8 @@ public class ServiceController : ControllerBase
         try
         {
             var result = await _serviceService.GetServiceAsyncById(serviceId, true, true);
-            return Ok(result);
+            var resultDTO = _mapper.Map<ServiceGetDTO>(result);
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -53,7 +59,12 @@ public class ServiceController : ControllerBase
         try
         {
             var result = await _serviceService.GetServicesAsyncByAddressId(addressId, true, true);
-            return Ok(result);
+            var resultDTO = new List<ServiceGetDTO>();
+            foreach (var service in result)
+            {
+                resultDTO.Add(_mapper.Map<ServiceGetDTO>(service));
+            }
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -66,7 +77,12 @@ public class ServiceController : ControllerBase
         try
         {
             var result = await _serviceService.GetServicesAsyncByRouteId(routeId, true, true);
-            return Ok(result);
+            var resultDTO = new List<ServiceGetDTO>();
+            foreach (var service in result)
+            {
+                resultDTO.Add(_mapper.Map<ServiceGetDTO>(service));
+            }
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -81,9 +97,11 @@ public class ServiceController : ControllerBase
             Service model = _mapper.Map<Service>(modelDTO);
             _serviceService.Add(model);
 
+            var resultDTO = _mapper.Map<ServiceGetDTO>(model);
+
             if (await _serviceService.SaveChangesAsync())
             {
-                return Ok(model);
+                return Ok(resultDTO);
             }
 
             return BadRequest();
@@ -104,9 +122,11 @@ public class ServiceController : ControllerBase
             _mapper.Map(modelDTO, service);
             _serviceService.Update(service);
 
+            var resultDTO = _mapper.Map<ServiceGetDTO>(service);
+
             if (await _serviceService.SaveChangesAsync())
             {
-                return Ok(service);
+                return Ok(resultDTO);
             }
 
             return BadRequest();
