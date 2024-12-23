@@ -1,6 +1,5 @@
-﻿using LogisticControl.Domain;
-using LogisticControl.Domain.Models;
-using LogisticControl.Repository;
+﻿using LogisticControl.Domain.Models;
+using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
@@ -9,11 +8,11 @@ namespace LogisticControl.Api.Controllers;
 [Route("[controller]")]
 public class AddressController : ControllerBase
 {
-    private readonly IRepository _repo;
+    private readonly IAddressService _addressService;
     
-    public AddressController(IRepository repo) 
+    public AddressController(IAddressService addressService) 
     {
-        _repo = repo;
+        _addressService = addressService;
     }
 
     [HttpGet]
@@ -21,7 +20,7 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetAllAddressesAsync(true);
+            var result = await _addressService.GetAllAddressesAsync(true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -35,7 +34,7 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetAddressAsyncById(addressId, true);
+            var result = await _addressService.GetAddressAsyncById(addressId, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -49,7 +48,7 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetAddressesAsyncByCompanyId(companyId, true);
+            var result = await _addressService.GetAddressesAsyncByCompanyId(companyId, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -62,9 +61,9 @@ public class AddressController : ControllerBase
     {
         try
         {
-            _repo.Add(model);
+            _addressService.Add(model);
 
-            if(await _repo.SaveChangesAsync())
+            if(await _addressService.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -83,12 +82,12 @@ public class AddressController : ControllerBase
         {
             if (addressId != model.Id) return BadRequest();
             
-            var address = await _repo.GetAddressAsyncById(addressId);
+            var address = await _addressService.GetAddressAsyncById(addressId);
             if (address == null) return NotFound();
 
-            _repo.Update(model);
+            _addressService.Update(model);
 
-            if (await _repo.SaveChangesAsync()) 
+            if (await _addressService.SaveChangesAsync()) 
             {
                 return Ok(model);
             }
@@ -105,12 +104,12 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var address = await _repo.GetAddressAsyncById(addressId);
+            var address = await _addressService.GetAddressAsyncById(addressId);
             if (address == null) return NotFound();
 
-            _repo.Delete(address);
+            _addressService.Delete(address);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _addressService.SaveChangesAsync())
             {
                 return Ok("Deletado");
             }

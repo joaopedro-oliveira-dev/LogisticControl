@@ -1,5 +1,9 @@
 using LogisticControl.Core;
+using LogisticControl.Domain.Models;
 using LogisticControl.Repository;
+using LogisticControl.Repository.Interfaces;
+using LogisticControl.Services;
+using LogisticControl.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
@@ -26,8 +30,18 @@ builder.Services.AddControllers()
 
 builder.Services.AddControllersWithViews(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
+builder.Services.AddScoped<IBaseRepository, BaseRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+builder.Services.AddScoped<IRouteRepository, RouteRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 
-builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddTransient<IAddressService, AddressService>();
+builder.Services.AddTransient<ICompanyService, CompanyService>();
+builder.Services.AddTransient<IDriverService, DriverService>();
+builder.Services.AddTransient<IRouteService, RouteService>();
+builder.Services.AddTransient<IServiceService, ServiceService>();
 
 var app = builder.Build();
 

@@ -1,5 +1,5 @@
 ﻿using LogisticControl.Domain.Models;
-using LogisticControl.Repository;
+using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
@@ -8,11 +8,11 @@ namespace LogisticControl.Api.Controllers;
 [Route("[controller]")]
 public class ServiceController : ControllerBase
 {
-    private readonly IRepository _repo;
+    private readonly IServiceService _serviceService;
 
-    public ServiceController(IRepository repo)
+    public ServiceController(IServiceService serviceService)
     {
-        _repo = repo;
+        _serviceService = serviceService;
     }
 
     [HttpGet]
@@ -20,7 +20,7 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetAllServicesAsync(true, true);
+            var result = await _serviceService.GetAllServicesAsync(true, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -34,7 +34,7 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetServiceAsyncById(serviceId, true, true);
+            var result = await _serviceService.GetServiceAsyncById(serviceId, true, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -48,7 +48,7 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetServicesAsyncByAddressId(addressId, true, true);
+            var result = await _serviceService.GetServicesAsyncByAddressId(addressId, true, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -61,7 +61,7 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var result = await _repo.GetServicesAsyncByRouteId(routeId, true, true);
+            var result = await _serviceService.GetServicesAsyncByRouteId(routeId, true, true);
             return Ok(result);
         }
         catch (Exception ex)
@@ -74,9 +74,9 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            _repo.Add(model);
+            _serviceService.Add(model);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _serviceService.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -95,12 +95,12 @@ public class ServiceController : ControllerBase
         {
             if (serviceId != model.Id) return BadRequest();
 
-            var service = await _repo.GetServiceAsyncById(serviceId);
+            var service = await _serviceService.GetServiceAsyncById(serviceId);
             if (service == null) return NotFound();
 
-            _repo.Update(model);
+            _serviceService.Update(model);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _serviceService.SaveChangesAsync())
             {
                 return Ok(model);
             }
@@ -117,12 +117,12 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var service = await _repo.GetServiceAsyncById(serviceId);
+            var service = await _serviceService.GetServiceAsyncById(serviceId);
             if (service == null) return NotFound();
 
-            _repo.Delete(service);
+            _serviceService.Delete(service);
 
-            if (await _repo.SaveChangesAsync())
+            if (await _serviceService.SaveChangesAsync())
             {
                 return Ok("Deletado");
             }

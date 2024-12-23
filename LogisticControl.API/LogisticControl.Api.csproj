@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LogisticControl.Core\LogisticControl.Core.csproj" />
-    <ProjectReference Include="..\LogisticControl.Repository\LogisticControl.Repository.csproj" />
+    <ProjectReference Include="..\LogisticControl.Services\LogisticControl.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
