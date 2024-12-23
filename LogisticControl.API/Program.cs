@@ -1,13 +1,12 @@
 using LogisticControl.Core;
-using LogisticControl.Domain.Models;
 using LogisticControl.Repository;
 using LogisticControl.Repository.Interfaces;
 using LogisticControl.Services;
 using LogisticControl.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +42,19 @@ builder.Services.AddTransient<IDriverService, DriverService>();
 builder.Services.AddTransient<IRouteService, RouteService>();
 builder.Services.AddTransient<IServiceService, ServiceService>();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger(options =>
+    {
+        options.RouteTemplate = "/openapi/{documentName}.json";
+    });
+    app.MapScalarApiReference();
+}
 
 
 // Configure the HTTP request pipeline.
