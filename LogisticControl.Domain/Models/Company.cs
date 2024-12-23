@@ -15,10 +15,7 @@ public class Company
 
     public int Id { get; set; }
     public string Name { get; set; }
-    public PartnershipTypeEnum PartnershipType
-    {
-        get; set;
-    }
+    public PartnershipTypeEnum PartnershipType { get; set; }
     public string Phone { get; set; }
     public virtual ICollection<Address> Addresses { get; set; } // Propriedade de coleção
 }

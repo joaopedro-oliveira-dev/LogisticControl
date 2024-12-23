@@ -1,4 +1,6 @@
-﻿using LogisticControl.Domain.Models;
+﻿using AutoMapper;
+using LogisticControl.Domain.DTOs;
+using LogisticControl.Domain.Models;
 using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace LogisticControl.Api.Controllers;
 public class CompanyController : ControllerBase
 {
     private readonly ICompanyService _companyService;
+    private readonly IMapper _mapper;
 
-    public CompanyController(ICompanyService companyService)
+    public CompanyController(ICompanyService companyService, IMapper mapper)
     {
         _companyService = companyService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -55,10 +59,11 @@ public class CompanyController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Company model)
+    public async Task<IActionResult> Post([FromBody] CompanyPostDTO modelDTO)
     {
         try
         {
+            Company model = _mapper.Map<Company>(modelDTO);
             _companyService.Add(model);
 
             if (await _companyService.SaveChangesAsync())
@@ -74,20 +79,19 @@ public class CompanyController : ControllerBase
         }
     }
     [HttpPut("{companyId}")]
-    public async Task<IActionResult> Put(int companyId, [FromBody] Company model)
+    public async Task<IActionResult> Put(int companyId, [FromBody] CompanyPutDTO modelDTO)
     {
         try
         {
-            if (companyId != model.Id) return BadRequest();
-
-            var company = await _companyService.GetCompanyAsyncById(companyId);
+            Company company = await _companyService.GetCompanyAsyncById(companyId);
             if (company == null) return NotFound();
 
-            _companyService.Update(model);
+            _mapper.Map(modelDTO, company);
+            _companyService.Update(company);
 
             if (await _companyService.SaveChangesAsync())
             {
-                return Ok(model);
+                return Ok(company);
             }
 
             return BadRequest();

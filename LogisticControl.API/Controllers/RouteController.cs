@@ -1,4 +1,6 @@
-﻿using LogisticControl.Services.Interfaces;
+﻿using AutoMapper;
+using LogisticControl.Domain.DTOs;
+using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Route = LogisticControl.Domain.Models.Route;
 
@@ -9,10 +11,11 @@ namespace LogisticControl.Api.Controllers;
 public class RouteController : ControllerBase
 {
     private readonly IRouteService _routeService;
-
-    public RouteController(IRouteService routeService)
+    private readonly IMapper _mapper;
+    public RouteController(IRouteService routeService, IMapper mapper)
     {
         _routeService = routeService;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -70,10 +73,11 @@ public class RouteController : ControllerBase
         }
     }
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Route model)
+    public async Task<IActionResult> Post([FromBody] RoutePostDTO modelDTO)
     {
         try
         {
+            Route model = _mapper.Map<Route>(modelDTO);
             _routeService.Add(model);
 
             if (await _routeService.SaveChangesAsync())
@@ -89,20 +93,19 @@ public class RouteController : ControllerBase
         }
     }
     [HttpPut("{routeId}")]
-    public async Task<IActionResult> Put(int routeId, [FromBody] Route model)
+    public async Task<IActionResult> Put(int routeId, [FromBody] RoutePutDTO modelDTO)
     {
         try
         {
-            if (routeId != model.Id) return BadRequest();
-
-            var route = await _routeService.GetRouteAsyncById(routeId);
+            Route route = await _routeService.GetRouteAsyncById(routeId);
             if (route == null) return NotFound();
 
-            _routeService.Update(model);
+            _mapper.Map(modelDTO, route);
+            _routeService.Update(route);
 
             if (await _routeService.SaveChangesAsync())
             {
-                return Ok(model);
+                return Ok(route);
             }
 
             return BadRequest();

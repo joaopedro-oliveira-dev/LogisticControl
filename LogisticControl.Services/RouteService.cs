@@ -1,4 +1,5 @@
-﻿using LogisticControl.Domain.Models;
+﻿using LogisticControl.Domain.Enums;
+using LogisticControl.Domain.Models;
 using LogisticControl.Repository.Interfaces;
 using LogisticControl.Services.Interfaces;
 
@@ -19,6 +20,8 @@ public class RouteService : IRouteService
     {
         try
         {
+            entity.Opening = DateTime.Now;
+            entity.Status = StatusRouteEnum.Pendente;
             _baseRepository.Add(entity);
         }
         catch (Exception ex)
@@ -63,7 +66,7 @@ public class RouteService : IRouteService
     {
         try
         {
-            return await _routeRepository.GetRouteAsyncByServiceId(routeId, includeDriver, includeServices);
+            return await _routeRepository.GetRouteAsyncById(routeId, includeDriver, includeServices);
         }
         catch (Exception ex)
         {
