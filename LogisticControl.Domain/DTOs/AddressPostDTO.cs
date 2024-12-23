@@ -9,6 +9,6 @@ public class AddressPostDTO
     public string? Complement { get; set; }
     public string Neighborhood { get; set; }
     public string City { get; set; }
-    public StateEnum State { get; set; }
+    public string State { get; set; }
     public int CompanyId { get; set; }
 }

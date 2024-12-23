@@ -25,7 +25,12 @@ public class AddressController : ControllerBase
         try
         {
             var result = await _addressService.GetAllAddressesAsync(true);
-            return Ok(result);
+            var resultDTO = new List<AddressGetDTO>();
+            foreach (var address in result)
+            {
+                resultDTO.Add(_mapper.Map<AddressGetDTO>(address));
+            }
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -39,7 +44,8 @@ public class AddressController : ControllerBase
         try
         {
             var result = await _addressService.GetAddressAsyncById(addressId, true);
-            return Ok(result);
+            var resultDTO = _mapper.Map<AddressGetDTO>(result);
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -53,7 +59,12 @@ public class AddressController : ControllerBase
         try
         {
             var result = await _addressService.GetAddressesAsyncByCompanyId(companyId, true);
-            return Ok(result);
+            var resultDTO = new List<AddressGetDTO>();
+            foreach (var address in result)
+            {
+                resultDTO.Add(_mapper.Map<AddressGetDTO>(address));
+            }
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -68,9 +79,11 @@ public class AddressController : ControllerBase
             Address model = _mapper.Map<Address>(modelDTO);
             _addressService.Add(model);
 
+            var resultDTO = _mapper.Map<AddressGetDTO>(model);
+
             if(await _addressService.SaveChangesAsync())
             {
-                return Ok(model);
+                return Ok(resultDTO);
             }
 
             return BadRequest();
@@ -92,9 +105,11 @@ public class AddressController : ControllerBase
 
             _addressService.Update(address);
 
+            var resultDTO = _mapper.Map<AddressGetDTO>(address);
+
             if (await _addressService.SaveChangesAsync()) 
             {
-                return Ok(address);
+                return Ok(resultDTO);
             }
 
             return BadRequest();

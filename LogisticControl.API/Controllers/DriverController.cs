@@ -25,7 +25,15 @@ public class DriverController : ControllerBase
         try
         {
             var result = await _driverService.GetAllDriversAsync(true);
-            return Ok(result);
+
+            var resultDTO = new List<DriverGetDTO>();
+
+            foreach(var driver in result)
+            {
+                resultDTO.Add(_mapper.Map<DriverGetDTO>(driver));
+            }
+
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -39,7 +47,10 @@ public class DriverController : ControllerBase
         try
         {
             var result = await _driverService.GetDriverAsyncById(driverId, true);
-            return Ok(result);
+
+            var resultDTO = _mapper.Map<DriverGetDTO>(result);
+
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -53,7 +64,10 @@ public class DriverController : ControllerBase
         try
         {
             var result = await _driverService.GetDriverAsyncByRouteId(routeId, true);
-            return Ok(result);
+
+            var resultDTO = _mapper.Map<DriverGetDTO>(result);
+
+            return Ok(resultDTO);
         }
         catch (Exception ex)
         {
@@ -68,9 +82,11 @@ public class DriverController : ControllerBase
             Driver model = _mapper.Map<Driver>(modelDTO);
             _driverService.Add(model);
 
+            var resultDTO = _mapper.Map<DriverGetDTO>(model);
+
             if (await _driverService.SaveChangesAsync())
             {
-                return Ok(model);
+                return Ok(resultDTO);
             }
 
             return BadRequest();
@@ -91,9 +107,11 @@ public class DriverController : ControllerBase
             _mapper.Map(modelDTO, driver);
             _driverService.Update(driver);
 
+            var resultDTO = _mapper.Map<DriverGetDTO>(driver);
+
             if (await _driverService.SaveChangesAsync())
             {
-                return Ok(driver);
+                return Ok(resultDTO);
             }
 
             return BadRequest();
