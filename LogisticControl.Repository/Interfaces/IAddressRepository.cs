@@ -6,5 +6,5 @@ public interface IAddressRepository
 {
     Task<Address[]> GetAllAddressesAsync(bool includeCompany = false);
     Task<Address[]> GetAddressesAsyncByCompanyId(int companyId, bool includeCompany = false);
-    Task<Address> GetAddressAsyncById(int addressId, bool includeCompany = false);
+    Task<Address?> GetAddressAsyncById(int addressId, bool includeCompany = false);
 }

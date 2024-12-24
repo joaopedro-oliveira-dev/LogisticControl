@@ -27,7 +27,7 @@ public class DriverRepository : IDriverRepository
 
         return await query.ToArrayAsync();
     }
-    public async Task<Driver> GetDriverAsyncByRouteId(int routeId, bool includeRoutes = false)
+    public async Task<Driver?> GetDriverAsyncByRouteId(int routeId, bool includeRoutes = false)
     {
         IQueryable<Driver> query = _context.Drivers;
 
@@ -40,7 +40,7 @@ public class DriverRepository : IDriverRepository
 
         return await query.FirstOrDefaultAsync();
     }
-    public async Task<Driver> GetDriverAsyncById(int driverId, bool includeRoutes = false)
+    public async Task<Driver?> GetDriverAsyncById(int driverId, bool includeRoutes = false)
     {
         IQueryable<Driver> query = _context.Drivers;
 

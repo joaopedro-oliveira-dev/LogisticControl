@@ -61,7 +61,7 @@ public class ServiceService : IServiceService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Service> GetServiceAsyncById(int serviceId, bool includeAddress = false, bool includeRoute = false)
+    public async Task<Service?> GetServiceAsyncById(int serviceId, bool includeAddress = false, bool includeRoute = false)
     {
         try
         {

@@ -50,7 +50,7 @@ public class RouteRepository : IRouteRepository
 
         return await query.ToArrayAsync();
     }
-    public async Task<Route> GetRouteAsyncByServiceId(int serviceId, bool includeDriver = false, bool includeServices = false)
+    public async Task<Route?> GetRouteAsyncByServiceId(int serviceId, bool includeDriver = false, bool includeServices = false)
     {
         IQueryable<Route> query = _context.Routes;
 
@@ -68,7 +68,7 @@ public class RouteRepository : IRouteRepository
 
         return await query.FirstOrDefaultAsync();
     }
-    public async Task<Route> GetRouteAsyncById(int routeId, bool includeDriver = false, bool includeServices = false)
+    public async Task<Route?> GetRouteAsyncById(int routeId, bool includeDriver = false, bool includeServices = false)
     {
         IQueryable<Route> query = _context.Routes;
 

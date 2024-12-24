@@ -24,19 +24,14 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var result = await _companyService.GetAllCompaniesAsync(true);
-            
-            var resultDTO = new List<CompanyGetDTO>();
-            foreach (var company in result)
-            {
-                resultDTO.Add(_mapper.Map<CompanyGetDTO>(company));
-            }
+            var companies = await _companyService.GetAllCompaniesAsync(true);
 
-            return Ok(resultDTO);
+            var companiesDTO = companies.Select(c => _mapper.Map<CompanyGetDTO>(c)).ToList();
+            return Ok(companiesDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpGet("{companyId}")]
@@ -44,15 +39,15 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var result = await _companyService.GetCompanyAsyncById(companyId, true);
+            var company = await _companyService.GetCompanyAsyncById(companyId, true);
+            if (company == null) return NotFound();
             
-            var resultDTO = _mapper.Map<CompanyGetDTO>(result);
-
-            return Ok(resultDTO);
+            var companyDTO = _mapper.Map<CompanyGetDTO>(company);
+            return Ok(companyDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpGet("address/{addressId}")]
@@ -60,15 +55,15 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var result = await _companyService.GetCompanyAsyncByAddressId(addressId, true);
+            var company = await _companyService.GetCompanyAsyncByAddressId(addressId, true);
+            if (company == null) return NotFound();
 
-            var resultDTO = _mapper.Map<CompanyGetDTO>(result);
-
-            return Ok(resultDTO);
+            var companyDTO = _mapper.Map<CompanyGetDTO>(company);
+            return Ok(companyDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPost]
@@ -79,18 +74,18 @@ public class CompanyController : ControllerBase
             Company model = _mapper.Map<Company>(modelDTO);
             _companyService.Add(model);
 
-            var resultDTO = _mapper.Map<CompanyGetDTO>(model);
+            var companyDTO = _mapper.Map<CompanyGetDTO>(model);
 
             if (await _companyService.SaveChangesAsync())
             {
-                return Ok(resultDTO);
+                return Ok(companyDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPut("{companyId}")]
@@ -98,24 +93,24 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            Company company = await _companyService.GetCompanyAsyncById(companyId);
+            var company = await _companyService.GetCompanyAsyncById(companyId);
             if (company == null) return NotFound();
 
             _mapper.Map(modelDTO, company);
             _companyService.Update(company);
 
-            var resultDTO = _mapper.Map<CompanyGetDTO>(company);
+            var companyDTO = _mapper.Map<CompanyGetDTO>(company);
 
             if (await _companyService.SaveChangesAsync())
             {
-                return Ok(resultDTO);
+                return Ok(companyDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpDelete("{companyId}")]
@@ -123,10 +118,10 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var address = await _companyService.GetCompanyAsyncById(companyId);
-            if (address == null) return NotFound();
+            var company = await _companyService.GetCompanyAsyncById(companyId);
+            if (company == null) return NotFound();
 
-            _companyService.Delete(address);
+            _companyService.Delete(company);
 
             if (await _companyService.SaveChangesAsync())
             {
@@ -135,9 +130,9 @@ public class CompanyController : ControllerBase
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 }

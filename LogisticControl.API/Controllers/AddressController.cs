@@ -24,17 +24,14 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var result = await _addressService.GetAllAddressesAsync(true);
-            var resultDTO = new List<AddressGetDTO>();
-            foreach (var address in result)
-            {
-                resultDTO.Add(_mapper.Map<AddressGetDTO>(address));
-            }
-            return Ok(resultDTO);
+            var addresses = await _addressService.GetAllAddressesAsync(true);
+
+            var addressesDTO = addresses.Select(a => _mapper.Map<AddressGetDTO>(a)).ToList();
+            return Ok(addressesDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -43,13 +40,15 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var result = await _addressService.GetAddressAsyncById(addressId, true);
-            var resultDTO = _mapper.Map<AddressGetDTO>(result);
-            return Ok(resultDTO);
+            var address = await _addressService.GetAddressAsyncById(addressId, true);
+            if (address == null) return NotFound();
+
+            var addressDTO = _mapper.Map<AddressGetDTO>(address);
+            return Ok(addressDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -58,17 +57,14 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var result = await _addressService.GetAddressesAsyncByCompanyId(companyId, true);
-            var resultDTO = new List<AddressGetDTO>();
-            foreach (var address in result)
-            {
-                resultDTO.Add(_mapper.Map<AddressGetDTO>(address));
-            }
-            return Ok(resultDTO);
+            var addresses = await _addressService.GetAddressesAsyncByCompanyId(companyId, true);
+
+            var addressesDTO = addresses.Select(a => _mapper.Map<AddressGetDTO>(a)).ToList();
+            return Ok(addressesDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPost]
@@ -79,18 +75,18 @@ public class AddressController : ControllerBase
             Address model = _mapper.Map<Address>(modelDTO);
             _addressService.Add(model);
 
-            var resultDTO = _mapper.Map<AddressGetDTO>(model);
+            var addressDTO = _mapper.Map<AddressGetDTO>(model);
 
             if(await _addressService.SaveChangesAsync())
             {
-                return Ok(resultDTO);
+                return Ok(addressDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPut("{addressId}")]
@@ -98,25 +94,24 @@ public class AddressController : ControllerBase
     {
         try
         {
-            Address address = await _addressService.GetAddressAsyncById(addressId);
+            var address = await _addressService.GetAddressAsyncById(addressId);
             if (address == null) return NotFound();
 
             _mapper.Map(modelDTO, address);
-
             _addressService.Update(address);
 
-            var resultDTO = _mapper.Map<AddressGetDTO>(address);
+            var addressDTO = _mapper.Map<AddressGetDTO>(address);
 
             if (await _addressService.SaveChangesAsync()) 
             {
-                return Ok(resultDTO);
+                return Ok(addressDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpDelete("{addressId}")]
@@ -136,9 +131,9 @@ public class AddressController : ControllerBase
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 }

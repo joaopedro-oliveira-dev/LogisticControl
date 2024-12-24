@@ -68,7 +68,7 @@ public class ServiceRepository : IServiceRepository
 
         return await query.ToArrayAsync();
     }
-    public async Task<Service> GetServiceAsyncById(int serviceId, bool includeAddress = false, bool includeRoute = false)
+    public async Task<Service?> GetServiceAsyncById(int serviceId, bool includeAddress = false, bool includeRoute = false)
     {
         IQueryable<Service> query = _context.Services;
 
