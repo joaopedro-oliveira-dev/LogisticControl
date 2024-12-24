@@ -27,7 +27,7 @@ public class CompanyRepository : ICompanyRepository
 
         return await query.ToArrayAsync();
     }
-    public async Task<Company> GetCompanyAsyncByAddressId(int addressId, bool includeAddress = false)
+    public async Task<Company?> GetCompanyAsyncByAddressId(int addressId, bool includeAddress = false)
     {
         IQueryable<Company> query = _context.Companies;
 
@@ -40,7 +40,7 @@ public class CompanyRepository : ICompanyRepository
 
         return await query.FirstOrDefaultAsync();
     }
-    public async Task<Company> GetCompanyAsyncById(int companyId, bool includeAddresses = false)
+    public async Task<Company?> GetCompanyAsyncById(int companyId, bool includeAddresses = false)
     {
         IQueryable<Company> query = _context.Companies;
 

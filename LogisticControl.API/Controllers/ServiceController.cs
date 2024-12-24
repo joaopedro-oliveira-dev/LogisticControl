@@ -24,17 +24,14 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var result = await _serviceService.GetAllServicesAsync(true, true);
-            var resultDTO = new List<ServiceGetDTO>();
-            foreach (var service in result)
-            {
-                resultDTO.Add(_mapper.Map<ServiceGetDTO>(service));
-            }
-            return Ok(resultDTO);
+            var services = await _serviceService.GetAllServicesAsync(true, true);
+
+            var servicesDTO = services.Select(s => _mapper.Map<ServiceGetDTO>(s)).ToList();
+            return Ok(servicesDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -43,13 +40,15 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var result = await _serviceService.GetServiceAsyncById(serviceId, true, true);
-            var resultDTO = _mapper.Map<ServiceGetDTO>(result);
-            return Ok(resultDTO);
+            var service = await _serviceService.GetServiceAsyncById(serviceId, true, true);
+            if (service == null) return NotFound();
+
+            var serviceDTO = _mapper.Map<ServiceGetDTO>(service);
+            return Ok(serviceDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -58,17 +57,14 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var result = await _serviceService.GetServicesAsyncByAddressId(addressId, true, true);
-            var resultDTO = new List<ServiceGetDTO>();
-            foreach (var service in result)
-            {
-                resultDTO.Add(_mapper.Map<ServiceGetDTO>(service));
-            }
-            return Ok(resultDTO);
+            var services = await _serviceService.GetServicesAsyncByAddressId(addressId, true, true);
+
+            var servicesDTO = services.Select(s => _mapper.Map<ServiceGetDTO>(s)).ToList();
+            return Ok(servicesDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpGet("route/{routeId}")]
@@ -76,17 +72,13 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var result = await _serviceService.GetServicesAsyncByRouteId(routeId, true, true);
-            var resultDTO = new List<ServiceGetDTO>();
-            foreach (var service in result)
-            {
-                resultDTO.Add(_mapper.Map<ServiceGetDTO>(service));
-            }
-            return Ok(resultDTO);
+            var services = await _serviceService.GetServicesAsyncByRouteId(routeId, true, true);
+            var servicesDTO = services.Select(s => _mapper.Map<ServiceGetDTO>(s)).ToList();
+            return Ok(servicesDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPost]
@@ -97,18 +89,18 @@ public class ServiceController : ControllerBase
             Service model = _mapper.Map<Service>(modelDTO);
             _serviceService.Add(model);
 
-            var resultDTO = _mapper.Map<ServiceGetDTO>(model);
+            var serviceDTO = _mapper.Map<ServiceGetDTO>(model);
 
             if (await _serviceService.SaveChangesAsync())
             {
-                return Ok(resultDTO);
+                return Ok(serviceDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPut("{serviceId}")]
@@ -116,24 +108,24 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            Service service = await _serviceService.GetServiceAsyncById(serviceId);
+            var service = await _serviceService.GetServiceAsyncById(serviceId);
             if (service == null) return NotFound();
 
             _mapper.Map(modelDTO, service);
             _serviceService.Update(service);
 
-            var resultDTO = _mapper.Map<ServiceGetDTO>(service);
+            var serviceDTO = _mapper.Map<ServiceGetDTO>(service);
 
             if (await _serviceService.SaveChangesAsync())
             {
-                return Ok(resultDTO);
+                return Ok(serviceDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpDelete("{serviceId}")]
@@ -153,9 +145,9 @@ public class ServiceController : ControllerBase
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 }

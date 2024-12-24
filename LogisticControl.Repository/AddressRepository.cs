@@ -40,7 +40,7 @@ public class AddressRepository : IAddressRepository
 
         return await query.ToArrayAsync();
     }
-    public async Task<Address> GetAddressAsyncById(int addressId, bool includeCompany = false)
+    public async Task<Address?> GetAddressAsyncById(int addressId, bool includeCompany = false)
     {
         IQueryable<Address> query = _context.Addresses;
 

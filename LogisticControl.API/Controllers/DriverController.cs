@@ -24,20 +24,14 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var result = await _driverService.GetAllDriversAsync(true);
+            var companies = await _driverService.GetAllDriversAsync(true);
 
-            var resultDTO = new List<DriverGetDTO>();
-
-            foreach(var driver in result)
-            {
-                resultDTO.Add(_mapper.Map<DriverGetDTO>(driver));
-            }
-
-            return Ok(resultDTO);
+            var companiesDTO = companies.Select(c => _mapper.Map<DriverGetDTO>(c)).ToList();
+            return Ok(companiesDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -46,32 +40,32 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var result = await _driverService.GetDriverAsyncById(driverId, true);
+            var driver = await _driverService.GetDriverAsyncById(driverId, true);
+            if (driver == null) return NotFound();
 
-            var resultDTO = _mapper.Map<DriverGetDTO>(result);
-
-            return Ok(resultDTO);
+            var driverDTO = _mapper.Map<DriverGetDTO>(driver);
+            return Ok(driverDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
     [HttpGet("route/{routeId}")]
-    public async Task<IActionResult> GetByCompanyId(int routeId)
+    public async Task<IActionResult> GetByRouteId(int routeId)
     {
         try
         {
-            var result = await _driverService.GetDriverAsyncByRouteId(routeId, true);
+            var driver = await _driverService.GetDriverAsyncByRouteId(routeId, true);
+            if (driver == null) return NotFound();
 
-            var resultDTO = _mapper.Map<DriverGetDTO>(result);
-
-            return Ok(resultDTO);
+            var driverDTO = _mapper.Map<DriverGetDTO>(driver);
+            return Ok(driverDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPost]
@@ -82,18 +76,18 @@ public class DriverController : ControllerBase
             Driver model = _mapper.Map<Driver>(modelDTO);
             _driverService.Add(model);
 
-            var resultDTO = _mapper.Map<DriverGetDTO>(model);
+            var driverDTO = _mapper.Map<DriverGetDTO>(model);
 
             if (await _driverService.SaveChangesAsync())
             {
-                return Ok(resultDTO);
+                return Ok(driverDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPut("{driverId}")]
@@ -101,24 +95,24 @@ public class DriverController : ControllerBase
     {
         try
         {
-            Driver driver = await _driverService.GetDriverAsyncById(driverId);
+            var driver = await _driverService.GetDriverAsyncById(driverId);
             if (driver == null) return NotFound();
 
             _mapper.Map(modelDTO, driver);
             _driverService.Update(driver);
 
-            var resultDTO = _mapper.Map<DriverGetDTO>(driver);
+            var driverDTO = _mapper.Map<DriverGetDTO>(driver);
 
             if (await _driverService.SaveChangesAsync())
             {
-                return Ok(resultDTO);
+                return Ok(driverDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpDelete("{driverId}")]
@@ -126,10 +120,10 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var address = await _driverService.GetDriverAsyncById(driverId);
-            if (address == null) return NotFound();
+            var driver = await _driverService.GetDriverAsyncById(driverId);
+            if (driver == null) return NotFound();
 
-            _driverService.Delete(address);
+            _driverService.Delete(driver);
 
             if (await _driverService.SaveChangesAsync())
             {
@@ -138,9 +132,9 @@ public class DriverController : ControllerBase
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 }

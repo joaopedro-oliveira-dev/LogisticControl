@@ -23,17 +23,14 @@ public class RouteController : ControllerBase
     {
         try
         {
-            var result = await _routeService.GetAllRoutesAsync(true, true);
-            var resultDTO = new List<RouteGetDTO>();
-            foreach (var route in result)
-            {
-                resultDTO.Add(_mapper.Map<RouteGetDTO>(route));
-            }
-            return Ok(resultDTO);
+            var routes = await _routeService.GetAllRoutesAsync(true, true);
+           
+            var routesDTO = routes.Select(r => _mapper.Map<RouteGetDTO>(r)).ToList();
+            return Ok(routesDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -42,13 +39,15 @@ public class RouteController : ControllerBase
     {
         try
         {
-            var result = await _routeService.GetRouteAsyncById(routeId, true, true);
-            var resultDTO = _mapper.Map<RouteGetDTO>(result);
-            return Ok(resultDTO);
+            var route = await _routeService.GetRouteAsyncById(routeId, true, true);
+            if (route == null) return NotFound();
+
+            var routeDTO = _mapper.Map<RouteGetDTO>(route);
+            return Ok(routeDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -57,17 +56,14 @@ public class RouteController : ControllerBase
     {
         try
         {
-            var result = await _routeService.GetRoutesAsyncByDriverId(driverId, true, true);
-            var resultDTO = new List<RouteGetDTO>();
-            foreach (var route in result)
-            {
-                resultDTO.Add(_mapper.Map<RouteGetDTO>(route));
-            }
-            return Ok(resultDTO);
+            var routes = await _routeService.GetRoutesAsyncByDriverId(driverId, true, true);
+            
+            var routesDTO = routes.Select(r => _mapper.Map<RouteGetDTO>(r)).ToList();
+            return Ok(routesDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpGet("service/{serviceId}")]
@@ -75,13 +71,15 @@ public class RouteController : ControllerBase
     {
         try
         {
-            var result = await _routeService.GetRouteAsyncByServiceId(serviceId, true, true);
-            var resultDTO = _mapper.Map<RouteGetDTO>(result);
-            return Ok(resultDTO);
+            var route = await _routeService.GetRouteAsyncByServiceId(serviceId, true, true);
+            if (route == null) return NotFound();
+
+            var routeDTO = _mapper.Map<RouteGetDTO>(route);
+            return Ok(routeDTO);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPost]
@@ -92,18 +90,18 @@ public class RouteController : ControllerBase
             Route model = _mapper.Map<Route>(modelDTO);
             _routeService.Add(model);
 
-            var resultDTO = _mapper.Map<RouteGetDTO>(model);
+            var routeDTO = _mapper.Map<RouteGetDTO>(model);
 
             if (await _routeService.SaveChangesAsync())
             {
-                return Ok(resultDTO);
+                return Ok(routeDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpPut("{routeId}")]
@@ -111,24 +109,24 @@ public class RouteController : ControllerBase
     {
         try
         {
-            Route route = await _routeService.GetRouteAsyncById(routeId);
+            var route = await _routeService.GetRouteAsyncById(routeId);
             if (route == null) return NotFound();
 
             _mapper.Map(modelDTO, route);
             _routeService.Update(route);
 
-            var resultDTO = _mapper.Map<RouteGetDTO>(route);
+            var routeDTO = _mapper.Map<RouteGetDTO>(route);
 
             if (await _routeService.SaveChangesAsync())
             {
-                return Ok(resultDTO);
+                return Ok(routeDTO);
             }
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
     [HttpDelete("{routeId}")]
@@ -148,9 +146,9 @@ public class RouteController : ControllerBase
 
             return BadRequest();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return BadRequest($"Erro: {ex.Message}");
+            return StatusCode(500);
         }
     }
 }
