@@ -4,18 +4,18 @@ using LogisticControl.Services.Interfaces;
 
 namespace LogisticControl.Services;
 
-public class CompanyService : ICompanyService
+public class UserService : IUserService
 {
-    private readonly ICompanyRepository _companyRepository;
     private readonly IBaseRepository _baseRepository;
+    private readonly IUserRepository _userRepository;
 
-    public CompanyService (ICompanyRepository companyRepository, IBaseRepository baseRepository)
+    public UserService(IBaseRepository baseRepository, IUserRepository userRepository)
     {
-        _companyRepository = companyRepository;
         _baseRepository = baseRepository;
+        _userRepository = userRepository;
     }
 
-    public void Add(Company entity)
+    public void Add(User entity)
     {
         try
         {
@@ -26,40 +26,18 @@ public class CompanyService : ICompanyService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Company[]> GetAllCompaniesAsync(bool includeAddresses = false)
+    public async Task<User?> GetUserAsyncByName(string userName)
     {
         try
         {
-            return await _companyRepository.GetAllCompaniesAsync(includeAddresses);
+            return await _userRepository.GetUserAsyncByName(userName);
         }
         catch (Exception ex)
         {
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Company?> GetCompanyAsyncByAddressId(int addressId, bool includeAddresses = false)
-    {
-        try
-        {
-            return await _companyRepository.GetCompanyAsyncByAddressId(addressId, includeAddresses);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"ERRO: {ex.Message}");
-        }
-    }
-    public async Task<Company?> GetCompanyAsyncById(int companyId, bool includeAddresses = false)
-    {
-        try
-        {
-            return await _companyRepository.GetCompanyAsyncById(companyId, includeAddresses);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"ERRO: {ex.Message}");
-        }
-    }
-    public void Update(Company entity)
+    public void Update(User entity)
     {
         try
         {
@@ -70,7 +48,7 @@ public class CompanyService : ICompanyService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public void Delete(Company entity)
+    public void Delete(User entity)
     {
         try
         {

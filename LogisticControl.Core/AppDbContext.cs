@@ -2,7 +2,6 @@
 using LogisticControl.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using System.Reflection.Emit;
 using Route = LogisticControl.Domain.Models.Route;
 
 namespace LogisticControl.Core;
@@ -14,6 +13,7 @@ public class AppDbContext : DbContext
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
+    public DbSet<User> Users { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Driver> Drivers { get; set; }

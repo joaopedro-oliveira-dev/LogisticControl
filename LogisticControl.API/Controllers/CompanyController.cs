@@ -2,12 +2,14 @@
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Models;
 using LogisticControl.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = "Administrador, Analista")]
 public class CompanyController : ControllerBase
 {
     private readonly ICompanyService _companyService;
@@ -74,11 +76,9 @@ public class CompanyController : ControllerBase
             Company model = _mapper.Map<Company>(modelDTO);
             _companyService.Add(model);
 
-            var companyDTO = _mapper.Map<CompanyGetDTO>(model);
-
             if (await _companyService.SaveChangesAsync())
             {
-                return Ok(companyDTO);
+                return Ok("Empresa criada com sucesso.");
             }
 
             return BadRequest();
@@ -99,11 +99,9 @@ public class CompanyController : ControllerBase
             _mapper.Map(modelDTO, company);
             _companyService.Update(company);
 
-            var companyDTO = _mapper.Map<CompanyGetDTO>(company);
-
             if (await _companyService.SaveChangesAsync())
             {
-                return Ok(companyDTO);
+                return Ok("Empresa editada com sucesso.");
             }
 
             return BadRequest();
@@ -125,7 +123,7 @@ public class CompanyController : ControllerBase
 
             if (await _companyService.SaveChangesAsync())
             {
-                return Ok("Deletado");
+                return Ok("Empresa deletada com sucesso.");
             }
 
             return BadRequest();

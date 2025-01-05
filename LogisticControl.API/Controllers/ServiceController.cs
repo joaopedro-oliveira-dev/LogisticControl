@@ -2,12 +2,14 @@
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Models;
 using LogisticControl.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = "Administrador, Analista")]
 public class ServiceController : ControllerBase
 {
     private readonly IServiceService _serviceService;
@@ -89,11 +91,9 @@ public class ServiceController : ControllerBase
             Service model = _mapper.Map<Service>(modelDTO);
             _serviceService.Add(model);
 
-            var serviceDTO = _mapper.Map<ServiceGetDTO>(model);
-
             if (await _serviceService.SaveChangesAsync())
             {
-                return Ok(serviceDTO);
+                return Ok("Serviço adicionado com sucesso.");
             }
 
             return BadRequest();
@@ -114,11 +114,9 @@ public class ServiceController : ControllerBase
             _mapper.Map(modelDTO, service);
             _serviceService.Update(service);
 
-            var serviceDTO = _mapper.Map<ServiceGetDTO>(service);
-
             if (await _serviceService.SaveChangesAsync())
             {
-                return Ok(serviceDTO);
+                return Ok("Serviço editado com sucesso.");
             }
 
             return BadRequest();
@@ -140,7 +138,7 @@ public class ServiceController : ControllerBase
 
             if (await _serviceService.SaveChangesAsync())
             {
-                return Ok("Deletado");
+                return Ok("Serviço deletado com sucesso.");
             }
 
             return BadRequest();

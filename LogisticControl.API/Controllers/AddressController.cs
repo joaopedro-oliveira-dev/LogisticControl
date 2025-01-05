@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using LogisticControl.Domain.DTOs;
+using LogisticControl.Domain.Enums;
 using LogisticControl.Domain.Models;
 using LogisticControl.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = "Administrador, Analista")]
 public class AddressController : ControllerBase
 {
     private readonly IAddressService _addressService;
@@ -75,11 +78,9 @@ public class AddressController : ControllerBase
             Address model = _mapper.Map<Address>(modelDTO);
             _addressService.Add(model);
 
-            var addressDTO = _mapper.Map<AddressGetDTO>(model);
-
             if(await _addressService.SaveChangesAsync())
             {
-                return Ok(addressDTO);
+                return Ok("Endereço adicionado com sucesso.");
             }
 
             return BadRequest();
@@ -100,11 +101,9 @@ public class AddressController : ControllerBase
             _mapper.Map(modelDTO, address);
             _addressService.Update(address);
 
-            var addressDTO = _mapper.Map<AddressGetDTO>(address);
-
             if (await _addressService.SaveChangesAsync()) 
             {
-                return Ok(addressDTO);
+                return Ok("Endereço editado com sucesso.");
             }
 
             return BadRequest();
@@ -126,7 +125,7 @@ public class AddressController : ControllerBase
 
             if (await _addressService.SaveChangesAsync())
             {
-                return Ok("Deletado");
+                return Ok("Endereço deletado com sucesso.");
             }
 
             return BadRequest();

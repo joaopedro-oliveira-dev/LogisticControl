@@ -51,7 +51,7 @@ public class RouteService : IRouteService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Route> GetRouteAsyncByServiceId(int serviceId, bool includeDriver = false, bool includeServices = false)
+    public async Task<Route?> GetRouteAsyncByServiceId(int serviceId, bool includeDriver = false, bool includeServices = false)
     {
         try
         {
@@ -62,7 +62,7 @@ public class RouteService : IRouteService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Route> GetRouteAsyncById(int routeId, bool includeDriver = false, bool includeServices = false)
+    public async Task<Route?> GetRouteAsyncById(int routeId, bool includeDriver = false, bool includeServices = false)
     {
         try
         {
