@@ -10,7 +10,7 @@ namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = "Administrador, Analista")]
+[Authorize(Roles = "Administrador,Analista")]
 public class AddressController : ControllerBase
 {
     private readonly IAddressService _addressService;

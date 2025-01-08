@@ -9,7 +9,7 @@ namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = "Administrador, Analista")]
+[Authorize(Roles = "Administrador,Analista")]
 public class ServiceController : ControllerBase
 {
     private readonly IServiceService _serviceService;
