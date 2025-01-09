@@ -65,6 +65,30 @@ public class UserController : ControllerBase
             return StatusCode(500);
         }
     }
+    [HttpPut("active/{userName}")]
+    public async Task<IActionResult> PutActive(string userName, [FromBody] UserPutActiveDTO modelDTO)
+    {
+        try
+        {
+            var user = await _userService.GetUserAsyncByName(userName);
+            if (user == null) return NotFound();
+
+            _mapper.Map(modelDTO, user);
+            _userService.Update(user);
+
+            if (await _userService.SaveChangesAsync())
+            {
+                if (user.Active) return Ok("Usuário ativado com sucesso.");
+                else return Ok("Usuário inativado com sucesso.");
+            }
+
+            return BadRequest();
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
     [HttpDelete("{userName}")]
     public async Task<IActionResult> Delete(string userName)
     {

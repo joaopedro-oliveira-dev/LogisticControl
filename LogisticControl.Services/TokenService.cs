@@ -23,7 +23,7 @@ public class TokenService : ITokenService
     public async Task<string> GenerateToken(User user)
     {
         var userDataBase = await _userRepository.GetUserAsyncByName(user.UserName);
-        if (userDataBase == null || userDataBase.Password != user.Password) return String.Empty;
+        if (userDataBase == null || userDataBase.Password != user.Password || !userDataBase.Active) return String.Empty;
 
         var secretyKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? String.Empty));
         var issuer = _configuration["Jwt:Issuer"];

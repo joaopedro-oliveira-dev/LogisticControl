@@ -17,8 +17,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasData(new List<User>
         {
-            new User("JOAO PEDRO ADM", "1234567891", RoleEnum.Administrador),
-            new User("JOAO PEDRO ANALISTA", "1234567891", RoleEnum.Analista),
+            new User("JOAO PEDRO ADM", "1234567891", RoleEnum.Administrador, true),
+            new User("JOAO PEDRO ANALISTA", "1234567891", RoleEnum.Analista, true),
         });
     }
 }

@@ -30,6 +30,7 @@ public class ConfigurationMapping : Profile
         
         CreateMap<UserPostDTO, User>().ReverseMap();
         CreateMap<UserPutDTO, User>().ReverseMap();
+        CreateMap<UserPutActiveDTO, User>().ReverseMap();
         CreateMap<LoginDTO, User>().ReverseMap();
     }
 }

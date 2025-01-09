@@ -19,6 +19,7 @@ public class UserService : IUserService
     {
         try
         {
+            entity.Active = true;
             _baseRepository.Add(entity);
         }
         catch (Exception ex)
