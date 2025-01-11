@@ -4,7 +4,9 @@ using LogisticControl.Domain.Models;
 using LogisticControl.Services;
 using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LogisticControl.Api.Controllers;
 
@@ -15,11 +17,13 @@ public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public UserController(IUserService userService, IMapper mapper)
+    public UserController(IUserService userService, IMapper mapper, UserManager<IdentityUser> userManager)
     {
         _userService = userService;
         _mapper = mapper;
+        _userManager = userManager;
     }
 
     [HttpPost]
@@ -65,15 +69,21 @@ public class UserController : ControllerBase
             return StatusCode(500);
         }
     }
-    [HttpPut("active/{userName}")]
-    public async Task<IActionResult> PutActive(string userName, [FromBody] UserPutActiveDTO modelDTO)
+    [HttpPut("active/{userName}/{active}")]
+    public async Task<IActionResult> PutActive(string userName, bool active)
     {
         try
         {
             var user = await _userService.GetUserAsyncByName(userName);
             if (user == null) return NotFound();
 
-            _mapper.Map(modelDTO, user);
+            IdentityUser? userLogin = await _userManager.FindByNameAsync(HttpContext.User.Claims.First(c => c.Type == "sub").Value);
+            
+            if (userLogin == null) return StatusCode(500);
+            
+            if (userLogin.UserName == user.UserName) return BadRequest();
+
+            user.Active = active;
             _userService.Update(user);
 
             if (await _userService.SaveChangesAsync())
