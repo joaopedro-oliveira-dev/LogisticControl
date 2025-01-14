@@ -22,4 +22,11 @@ public class UserRepository : IUserRepository
 
         return await query.FirstOrDefaultAsync();
     }
+
+    public async Task<List<User>?> GetAllUsers()
+    {
+        IQueryable<User> query = _context.Users;
+
+        return await query.ToListAsync();
+    }
 }

@@ -71,4 +71,17 @@ public class UserService : IUserService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
+
+    public async Task<List<User>?> GetAllUsers()
+    {
+        try
+        {
+            return await _userRepository.GetAllUsers();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"ERRO: {ex.Message}");
+        }
+    }
+
 }

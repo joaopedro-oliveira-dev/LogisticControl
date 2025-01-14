@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using LogisticControl.Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -106,11 +107,9 @@ builder.Services.AddAuthentication(x =>
         };
     });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<IUserStore<IdentityUser>, UserStore<IdentityUser, IdentityRole, ApplicationDbContext>>();
-builder.Services.AddScoped<IRoleStore<IdentityRole>, RoleStore<IdentityRole, ApplicationDbContext>>();
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 

@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Models;
-using LogisticControl.Services;
 using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -17,13 +16,13 @@ public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UserController(IUserService userService, IMapper mapper, UserManager<IdentityUser> userManager)
+    public UserController(IUserService userService, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _userService = userService;
         _mapper = mapper;
-        _userManager = userManager;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     [HttpPost]
@@ -77,11 +76,13 @@ public class UserController : ControllerBase
             var user = await _userService.GetUserAsyncByName(userName);
             if (user == null) return NotFound();
 
-            IdentityUser? userLogin = await _userManager.FindByNameAsync(HttpContext.User.Claims.First(c => c.Type == "sub").Value);
-            
+            var httpContextUser = _httpContextAccessor?.HttpContext?.User;
+
+            var userLogin = httpContextUser?.Identity?.Name;
+
             if (userLogin == null) return StatusCode(500);
-            
-            if (userLogin.UserName == user.UserName) return BadRequest();
+
+            if (userLogin == user.UserName) return BadRequest();
 
             user.Active = active;
             _userService.Update(user);
@@ -121,4 +122,21 @@ public class UserController : ControllerBase
             return StatusCode(500);
         }
     }
+
+    [HttpGet()]
+    public async Task<IActionResult> GetAll()
+    {
+        try
+        {
+            var users = await _userService.GetAllUsers();
+
+
+            return Ok(users);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500);
+        }
+    }
+
 }
