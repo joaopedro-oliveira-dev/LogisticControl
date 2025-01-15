@@ -48,7 +48,7 @@ public class AddressService : IAddressService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Address> GetAddressAsyncById(int addressId, bool includeCompany = false)
+    public async Task<Address?> GetAddressAsyncById(int addressId, bool includeCompany = false)
     {
         try
         {

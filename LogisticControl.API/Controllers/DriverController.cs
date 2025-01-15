@@ -2,12 +2,14 @@
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Models;
 using LogisticControl.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = "Administrador")]
 public class DriverController : ControllerBase
 {
     private readonly IDriverService _driverService;
@@ -76,11 +78,9 @@ public class DriverController : ControllerBase
             Driver model = _mapper.Map<Driver>(modelDTO);
             _driverService.Add(model);
 
-            var driverDTO = _mapper.Map<DriverGetDTO>(model);
-
             if (await _driverService.SaveChangesAsync())
             {
-                return Ok(driverDTO);
+                return Ok("Motorista adicionado com sucesso.");
             }
 
             return BadRequest();
@@ -101,11 +101,9 @@ public class DriverController : ControllerBase
             _mapper.Map(modelDTO, driver);
             _driverService.Update(driver);
 
-            var driverDTO = _mapper.Map<DriverGetDTO>(driver);
-
             if (await _driverService.SaveChangesAsync())
             {
-                return Ok(driverDTO);
+                return Ok("Motorista editado com sucesso.");
             }
 
             return BadRequest();
@@ -127,7 +125,7 @@ public class DriverController : ControllerBase
 
             if (await _driverService.SaveChangesAsync())
             {
-                return Ok("Deletado");
+                return Ok("Motorista deletado com sucesso.");
             }
 
             return BadRequest();

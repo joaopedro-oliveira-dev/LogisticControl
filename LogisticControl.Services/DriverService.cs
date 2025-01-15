@@ -37,7 +37,7 @@ public class DriverService : IDriverService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Driver> GetDriverAsyncByRouteId(int routeId, bool includeRoutes = false)
+    public async Task<Driver?> GetDriverAsyncByRouteId(int routeId, bool includeRoutes = false)
     {
         try
         {
@@ -48,7 +48,7 @@ public class DriverService : IDriverService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Driver> GetDriverAsyncById(int driverId, bool includeRoutes = false)
+    public async Task<Driver?> GetDriverAsyncById(int driverId, bool includeRoutes = false)
     {
         try
         {

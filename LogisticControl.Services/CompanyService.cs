@@ -37,7 +37,7 @@ public class CompanyService : ICompanyService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Company> GetCompanyAsyncByAddressId(int addressId, bool includeAddresses = false)
+    public async Task<Company?> GetCompanyAsyncByAddressId(int addressId, bool includeAddresses = false)
     {
         try
         {
@@ -48,7 +48,7 @@ public class CompanyService : ICompanyService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<Company> GetCompanyAsyncById(int companyId, bool includeAddresses = false)
+    public async Task<Company?> GetCompanyAsyncById(int companyId, bool includeAddresses = false)
     {
         try
         {

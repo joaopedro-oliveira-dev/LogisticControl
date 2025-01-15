@@ -27,5 +27,9 @@ public class ConfigurationMapping : Profile
         CreateMap<ServiceGetDTO, Service>().ReverseMap();
         CreateMap<ServicePostDTO, Service>().ReverseMap();
         CreateMap<ServicePutDTO, Service>().ReverseMap();
+        
+        CreateMap<UserPostDTO, User>().ReverseMap();
+        CreateMap<UserPutDTO, User>().ReverseMap();
+        CreateMap<LoginDTO, User>().ReverseMap();
     }
 }

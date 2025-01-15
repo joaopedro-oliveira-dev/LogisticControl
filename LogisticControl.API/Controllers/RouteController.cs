@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Route = LogisticControl.Domain.Models.Route;
 
@@ -8,6 +9,7 @@ namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Roles = "Administrador,Analista")]
 public class RouteController : ControllerBase
 {
     private readonly IRouteService _routeService;
@@ -90,11 +92,9 @@ public class RouteController : ControllerBase
             Route model = _mapper.Map<Route>(modelDTO);
             _routeService.Add(model);
 
-            var routeDTO = _mapper.Map<RouteGetDTO>(model);
-
             if (await _routeService.SaveChangesAsync())
             {
-                return Ok(routeDTO);
+                return Ok("Rota adicionada com sucesso.");
             }
 
             return BadRequest();
@@ -115,11 +115,9 @@ public class RouteController : ControllerBase
             _mapper.Map(modelDTO, route);
             _routeService.Update(route);
 
-            var routeDTO = _mapper.Map<RouteGetDTO>(route);
-
             if (await _routeService.SaveChangesAsync())
             {
-                return Ok(routeDTO);
+                return Ok("Rota editada com sucesso.");
             }
 
             return BadRequest();
@@ -141,7 +139,7 @@ public class RouteController : ControllerBase
 
             if (await _routeService.SaveChangesAsync())
             {
-                return Ok("Deletado");
+                return Ok("Rota deletada com sucesso.");
             }
 
             return BadRequest();
