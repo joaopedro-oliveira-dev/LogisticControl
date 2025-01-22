@@ -17,23 +17,25 @@ namespace LogisticControl.Api.Migrations
                 schema: "api",
                 columns: table => new
                 {
-                    user_name = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
-                    role = table.Column<string>(type: "text", nullable: false)
+                    role = table.Column<string>(type: "text", nullable: false),
+                    active = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("p_k_users", x => x.user_name);
+                    table.PrimaryKey("p_k_users", x => x.email);
                 });
 
             migrationBuilder.InsertData(
                 schema: "api",
                 table: "users",
-                columns: new[] { "user_name", "password", "role" },
+                columns: new[] { "email", "active", "name", "password", "role" },
                 values: new object[,]
                 {
-                    { "JOAO PEDRO ADM", "1234567891", "Administrador" },
-                    { "JOAO PEDRO ANALISTA", "1234567891", "Administrador" }
+                    { "joao.adm@gmail.com", true, "JOAO PEDRO ADM", "Administrador123#", "Administrador" },
+                    { "joao.analista@gmail.com", true, "JOAO PEDRO ANALISTA", "Analista123#", "Analista" }
                 });
         }
 

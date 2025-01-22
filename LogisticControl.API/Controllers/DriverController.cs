@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Models;
 using LogisticControl.Services.Interfaces;
@@ -14,11 +15,14 @@ public class DriverController : ControllerBase
 {
     private readonly IDriverService _driverService;
     private readonly IMapper _mapper;
+    private readonly IValidator<DriverPostDTO> _validatorPost;
+    private readonly IValidator<DriverPutDTO> _validatorPut;
 
-    public DriverController(IDriverService driverService, IMapper mapper)
+    public DriverController(IDriverService driverService, IMapper mapper, IValidator<DriverPostDTO> validatorPost)
     {
         _driverService = driverService;
         _mapper = mapper;
+        _validatorPost = validatorPost;
     }
 
     [HttpGet]
@@ -75,8 +79,14 @@ public class DriverController : ControllerBase
     {
         try
         {
-            Driver model = _mapper.Map<Driver>(modelDTO);
-            _driverService.Add(model);
+            var validationDTO = await _validatorPost.ValidateAsync(modelDTO);
+
+            if (validationDTO.IsValid)
+            {
+                Driver model = _mapper.Map<Driver>(modelDTO);
+                _driverService.Add(model);
+            }
+            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage)); 
 
             if (await _driverService.SaveChangesAsync())
             {
@@ -95,11 +105,16 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var driver = await _driverService.GetDriverAsyncById(driverId);
-            if (driver == null) return NotFound();
+            var validationDTO = await _validatorPut.ValidateAsync(modelDTO);
 
-            _mapper.Map(modelDTO, driver);
-            _driverService.Update(driver);
+            if (validationDTO.IsValid)
+            {
+                var driver = await _driverService.GetDriverAsyncById(driverId);
+                if (driver == null) return NotFound();
+                _mapper.Map(modelDTO, driver);
+                _driverService.Update(driver);
+            }
+            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
 
             if (await _driverService.SaveChangesAsync())
             {

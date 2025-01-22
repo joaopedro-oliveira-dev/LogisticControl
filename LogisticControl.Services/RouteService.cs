@@ -21,6 +21,8 @@ public class RouteService : IRouteService
         try
         {
             entity.Opening = DateTime.Now;
+            entity.Realization = null;
+            entity.Finalization = null;
             entity.Status = StatusRouteEnum.Pendente;
             _baseRepository.Add(entity);
         }
@@ -77,7 +79,12 @@ public class RouteService : IRouteService
     {
         try
         {
-            _baseRepository.Update(entity);
+            if (entity.Realization > DateTime.Now) 
+                throw new Exception("A data de realização da rota não pode ser posterior à data e hora atuais.");
+            else if (entity.Finalization > DateTime.Now)
+                throw new Exception("A data de finalização da rota não pode ser posterior à data e hora atuais.");
+            else
+                _baseRepository.Update(entity);
         }
         catch (Exception ex)
         {

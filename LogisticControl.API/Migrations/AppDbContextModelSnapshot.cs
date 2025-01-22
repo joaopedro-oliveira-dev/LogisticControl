@@ -377,13 +377,23 @@ namespace LogisticControl.Api.Migrations
 
             modelBuilder.Entity("LogisticControl.Domain.Models.User", b =>
                 {
-                    b.Property<string>("UserName")
+                    b.Property<string>("Id")
                         .HasColumnType("text")
-                        .HasColumnName("user_name");
+                        .HasColumnName("id");
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean")
                         .HasColumnName("active");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -395,24 +405,32 @@ namespace LogisticControl.Api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("role");
 
-                    b.HasKey("UserName")
+                    b.HasKey("Id")
                         .HasName("p_k_users");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("i_x_users_email");
 
                     b.ToTable("users", "api");
 
                     b.HasData(
                         new
                         {
-                            UserName = "JOAO PEDRO ADM",
+                            Id = "ef30a1f4-9bbd-4f2c-be1e-5290b695892f",
                             Active = true,
-                            Password = "1234567891",
+                            Email = "joao.adm@gmail.com",
+                            Name = "JOAO PEDRO ADM",
+                            Password = "Administrador123#",
                             Role = "Administrador"
                         },
                         new
                         {
-                            UserName = "JOAO PEDRO ANALISTA",
+                            Id = "3af3a70d-fc0c-458a-ae8b-4e077c7890b4",
                             Active = true,
-                            Password = "1234567891",
+                            Email = "joao.analista@gmail.com",
+                            Name = "JOAO PEDRO ANALISTA",
+                            Password = "Analista123#",
                             Role = "Analista"
                         });
                 });

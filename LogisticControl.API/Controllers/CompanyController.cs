@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Models;
 using LogisticControl.Services.Interfaces;
@@ -14,11 +15,15 @@ public class CompanyController : ControllerBase
 {
     private readonly ICompanyService _companyService;
     private readonly IMapper _mapper;
+    private readonly IValidator<CompanyPostDTO> _validatorPost;
+    private readonly IValidator<CompanyPutDTO> _validatorPut;
 
-    public CompanyController(ICompanyService companyService, IMapper mapper)
+    public CompanyController(ICompanyService companyService, IMapper mapper, IValidator<CompanyPostDTO> validatorPost, IValidator<CompanyPutDTO> validatorPut)
     {
         _companyService = companyService;
         _mapper = mapper;
+        _validatorPost = validatorPost;
+        _validatorPut = validatorPut;
     }
 
     [HttpGet]
@@ -73,8 +78,14 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            Company model = _mapper.Map<Company>(modelDTO);
-            _companyService.Add(model);
+            var validationDTO = await _validatorPost.ValidateAsync(modelDTO);
+
+            if (validationDTO.IsValid)
+            {
+                Company model = _mapper.Map<Company>(modelDTO);
+                _companyService.Add(model);
+            }
+            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
 
             if (await _companyService.SaveChangesAsync())
             {
@@ -93,11 +104,16 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var company = await _companyService.GetCompanyAsyncById(companyId);
-            if (company == null) return NotFound();
+            var validationDTO = await _validatorPut.ValidateAsync(modelDTO);
 
-            _mapper.Map(modelDTO, company);
-            _companyService.Update(company);
+            if (validationDTO.IsValid)
+            {
+                var company = await _companyService.GetCompanyAsyncById(companyId);
+                if (company == null) return NotFound();
+                _mapper.Map(modelDTO, company);
+                _companyService.Update(company);
+            }
+            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));           
 
             if (await _companyService.SaveChangesAsync())
             {

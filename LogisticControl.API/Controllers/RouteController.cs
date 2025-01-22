@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +15,14 @@ public class RouteController : ControllerBase
 {
     private readonly IRouteService _routeService;
     private readonly IMapper _mapper;
-    public RouteController(IRouteService routeService, IMapper mapper)
+    private readonly IValidator<RoutePostDTO> _validatorPost;
+    private readonly IValidator<RoutePutDTO> _validatorPut;
+    public RouteController(IRouteService routeService, IMapper mapper, IValidator<RoutePostDTO> validatorPost, IValidator<RoutePutDTO> validatorPut)
     {
         _routeService = routeService;
         _mapper = mapper;
+        _validatorPost = validatorPost;
+        _validatorPut = validatorPut;
     }
 
     [HttpGet]
@@ -89,8 +94,14 @@ public class RouteController : ControllerBase
     {
         try
         {
-            Route model = _mapper.Map<Route>(modelDTO);
-            _routeService.Add(model);
+            var validationDTO = await _validatorPost.ValidateAsync(modelDTO);
+
+            if (validationDTO.IsValid)
+            {
+                Route model = _mapper.Map<Route>(modelDTO);
+                _routeService.Add(model);
+            }
+            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
 
             if (await _routeService.SaveChangesAsync())
             {
@@ -109,11 +120,16 @@ public class RouteController : ControllerBase
     {
         try
         {
-            var route = await _routeService.GetRouteAsyncById(routeId);
-            if (route == null) return NotFound();
+            var validationDTO = await _validatorPut.ValidateAsync(modelDTO);
 
-            _mapper.Map(modelDTO, route);
-            _routeService.Update(route);
+            if (validationDTO.IsValid)
+            {
+                var route = await _routeService.GetRouteAsyncById(routeId);
+                if (route == null) return NotFound();
+                _mapper.Map(modelDTO, route);
+                _routeService.Update(route);
+            }
+            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
 
             if (await _routeService.SaveChangesAsync())
             {
