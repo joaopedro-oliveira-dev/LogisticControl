@@ -15,5 +15,5 @@ public class ServicePutDTO
     public string? Responsible { get; set; }
     public string? DriverObservation { get; set; }
     public string Status { get; set; }
-    public int? RouteId { get; set; }
+    public int RouteId { get; set; }
 }

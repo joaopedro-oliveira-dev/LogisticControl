@@ -4,7 +4,6 @@ namespace LogisticControl.Domain.DTOs;
 
 public class CompanyPutDTO
 {
-    public string Name { get; set; }
     public string PartnershipType { get; set; }
     public string Phone { get; set; }
 }

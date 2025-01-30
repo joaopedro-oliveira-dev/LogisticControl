@@ -14,19 +14,28 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<User?> GetUserAsyncByName(string userName)
+    public async Task<User[]> GetAllUsersAsync()
     {
         IQueryable<User> query = _context.Users;
 
-        query = query.AsNoTracking().Where(u => u.UserName == userName);
+        query.AsNoTracking().OrderBy(u => u.Name);
+
+        return await query.ToArrayAsync();
+    }
+    public async Task<User?> GetUserAsyncById(string id)
+    {
+        IQueryable<User> query = _context.Users;
+
+        query = query.AsNoTracking().Where(u => u.Id == id);
 
         return await query.FirstOrDefaultAsync();
     }
-
-    public async Task<List<User>?> GetAllUsers()
+    public async Task<User?> GetUserAsyncByEmail(string email)
     {
         IQueryable<User> query = _context.Users;
 
-        return await query.ToListAsync();
+        query = query.AsNoTracking().Where(u => u.Email == email);
+
+        return await query.FirstOrDefaultAsync();
     }
 }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogisticControl.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241229200912_AddUsersTable")]
+    [Migration("20250115223455_AddUsersTable")]
     partial class AddUsersTable
     {
         /// <inheritdoc />
@@ -380,9 +380,18 @@ namespace LogisticControl.Api.Migrations
 
             modelBuilder.Entity("LogisticControl.Domain.Models.User", b =>
                 {
-                    b.Property<string>("UserName")
+                    b.Property<string>("Email")
                         .HasColumnType("text")
-                        .HasColumnName("user_name");
+                        .HasColumnName("email");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean")
+                        .HasColumnName("active");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -394,7 +403,7 @@ namespace LogisticControl.Api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("role");
 
-                    b.HasKey("UserName")
+                    b.HasKey("Email")
                         .HasName("p_k_users");
 
                     b.ToTable("users", "api");
@@ -402,15 +411,19 @@ namespace LogisticControl.Api.Migrations
                     b.HasData(
                         new
                         {
-                            UserName = "JOAO PEDRO ADM",
-                            Password = "1234567891",
+                            Email = "joao.adm@gmail.com",
+                            Active = true,
+                            Name = "JOAO PEDRO ADM",
+                            Password = "Administrador123#",
                             Role = "Administrador"
                         },
                         new
                         {
-                            UserName = "JOAO PEDRO ANALISTA",
-                            Password = "1234567891",
-                            Role = "Administrador"
+                            Email = "joao.analista@gmail.com",
+                            Active = true,
+                            Name = "JOAO PEDRO ANALISTA",
+                            Password = "Analista123#",
+                            Role = "Analista"
                         });
                 });
 

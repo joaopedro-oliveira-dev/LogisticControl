@@ -20,6 +20,7 @@ public class UserService : IUserService
         try
         {
             entity.Active = true;
+            entity.Id = Guid.NewGuid().ToString();
             _baseRepository.Add(entity);
         }
         catch (Exception ex)
@@ -27,11 +28,33 @@ public class UserService : IUserService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-    public async Task<User?> GetUserAsyncByName(string userName)
+    public async Task<User?> GetUserAsyncById(string id)
     {
         try
         {
-            return await _userRepository.GetUserAsyncByName(userName);
+            return await _userRepository.GetUserAsyncById(id);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"ERRO: {ex.Message}");
+        }
+    }
+    public async Task<User?> GetUserAsyncByEmail(string email)
+    {
+        try
+        {
+            return await _userRepository.GetUserAsyncByEmail(email);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"ERRO: {ex.Message}");
+        }
+    }
+    public async Task<User[]> GetAllUsersAsync()
+    {
+        try
+        {
+            return await _userRepository.GetAllUsersAsync();
         }
         catch (Exception ex)
         {
@@ -71,17 +94,4 @@ public class UserService : IUserService
             throw new Exception($"ERRO: {ex.Message}");
         }
     }
-
-    public async Task<List<User>?> GetAllUsers()
-    {
-        try
-        {
-            return await _userRepository.GetAllUsers();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"ERRO: {ex.Message}");
-        }
-    }
-
 }

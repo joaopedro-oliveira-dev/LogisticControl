@@ -4,7 +4,7 @@ namespace LogisticControl.Repository.Interfaces;
 
 public interface IUserRepository
 {
-    Task<User?> GetUserAsyncByName(string userName);
-
-    Task<List<User>?> GetAllUsers();
+    Task<User[]> GetAllUsersAsync();
+    Task<User?> GetUserAsyncById(string id);
+    Task<User?> GetUserAsyncByEmail(string email);
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Enums;
 using LogisticControl.Domain.Models;
@@ -15,11 +16,15 @@ public class AddressController : ControllerBase
 {
     private readonly IAddressService _addressService;
     private readonly IMapper _mapper;
-    
-    public AddressController(IAddressService addressService, IMapper mapper) 
+    private readonly IValidator<AddressPostDTO> _validatorPost;
+    private readonly IValidator<AddressPutDTO> _validatorPut;
+
+    public AddressController(IAddressService addressService, IMapper mapper, IValidator<AddressPostDTO> validatorPost, IValidator<AddressPutDTO> validatorPut)
     {
         _addressService = addressService;
         _mapper = mapper;
+        _validatorPost = validatorPost;
+        _validatorPut = validatorPut;
     }
 
     [HttpGet]
@@ -75,8 +80,14 @@ public class AddressController : ControllerBase
     {
         try
         {
-            Address model = _mapper.Map<Address>(modelDTO);
-            _addressService.Add(model);
+            var validationDTO = await _validatorPost.ValidateAsync(modelDTO);
+
+            if (validationDTO.IsValid)
+            {
+                Address model = _mapper.Map<Address>(modelDTO);
+                _addressService.Add(model);
+            }
+            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
 
             if(await _addressService.SaveChangesAsync())
             {
@@ -95,11 +106,20 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var address = await _addressService.GetAddressAsyncById(addressId);
-            if (address == null) return NotFound();
+            var validationDTO = await _validatorPut.ValidateAsync(modelDTO);
 
-            _mapper.Map(modelDTO, address);
-            _addressService.Update(address);
+            if(validationDTO.IsValid)
+            {
+                var address = await _addressService.GetAddressAsyncById(addressId);
+                if (address == null) return NotFound();
+
+                _mapper.Map(modelDTO, address);
+                _addressService.Update(address);
+            }
+            else
+            {
+                return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+            }
 
             if (await _addressService.SaveChangesAsync()) 
             {
