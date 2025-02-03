@@ -1,0 +1,28 @@
+﻿@page "/PutCompany/{id:int}"
+@model LogisticControl.Api.Pages.Company.UpdateCompanyModel
+@{
+    ViewData["Title"] = "Editar Empresa";
+}
+
+<h2>Editar Empresa</h2>
+
+<div>
+    <label for="inputName">Nome:</label>
+    <input type="text" id="inputName" name="Name" value="@Model.Company.Name" disabled/>
+</div>
+<form method="post">
+    <div>
+        <label for="selectPartnershipType">Tipo de Parceria:</label>
+        <select id="selectPartnershipType" name="PartnershipType" required>
+            @foreach (var partnershipType in Model.PartnershipTypes)
+            {
+                <option value="@partnershipType" selected="@(partnershipType == Model.Company.PartnershipType ? "selected" : null)">@partnershipType</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label for="inputPhone">Telefone:</label>
+        <input type="text" id="inputPhone" name="Phone" value="@Model.Company.Phone" required />
+    </div>
+    <button type="submit">Incluir</button>
+</form>

@@ -1,0 +1,28 @@
+﻿@page "/PostCompany"
+@model LogisticControl.Api.Pages.Company.CreateCompanyModel
+@{
+    ViewData["Title"] = "Incluir Empresa";
+}
+
+<h2>Incluir Empresa</h2>
+
+<form method="post">
+    <div>
+        <label for="inputName">Nome:</label>
+        <input type="text" id="inputName" name="Name" required />
+    </div>
+    <div>
+        <label for="selectPartnershipType">Tipo de Parceria:</label>
+        <select id="selectPartnershipType" name="PartnershipType" required>
+            @foreach(var partnershipType in Model.PartnershipTypes)
+            {
+                <option value="@partnershipType">@partnershipType</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label for="inputPhone">Telefone:</label>
+        <input type="text" id="inputPhone" name="Phone" required />
+    </div>
+    <button type="submit">Incluir</button>
+</form>

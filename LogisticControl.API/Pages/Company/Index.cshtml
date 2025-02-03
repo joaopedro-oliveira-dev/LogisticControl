@@ -1,0 +1,38 @@
+﻿@page "/GetCompany"
+@model LogisticControl.Api.Pages.Company.IndexModel
+@{
+    ViewData["Title"] = "Empresas";
+}
+
+<h2>Empresas Parceiras</h2>
+
+<table>
+    <thead>
+        <tr>
+            <td>Código</td>
+            <td>Nome</td>
+            <td>Tipo de Parceria</td>
+            <td>Telefone</td>
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model.Companies.Any()) 
+    {
+        @foreach(var company in Model.Companies) 
+        {
+            <tr>
+                <td>@company.Id</td>
+                <td>@company.Name</td>
+                <td>@company.PartnershipType</td>
+                <td>@company.Phone</td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td>Nenhum registro encontrado.</td>
+        </tr>
+    }
+    </tbody>
+</table>
