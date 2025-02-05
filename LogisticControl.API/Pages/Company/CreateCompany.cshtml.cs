@@ -16,17 +16,14 @@ public class CreateCompanyModel : PageModel
         _httpClient = httpClient;
         _logger = logger;
     }
-    public List<string> PartnershipTypes { get; set; } = new();
+    public List<PartnershipTypeEnum> PartnershipTypes { get; set; } = new();
     public void OnGet()
     {
-        PartnershipTypes = Enum.GetValues(typeof(PartnershipTypeEnum))
-            .Cast<PartnershipTypeEnum>()
-            .Select(e => e.GetFormattedName())
-            .ToList();
+        PartnershipTypes = EnumExtensions.GetAllEnums<PartnershipTypeEnum>();
     }
     [BindProperty]
     public CompanyPostDTO Company { get; set; } = new();
-    public async Task OnPostAsync()
+    public async Task<IActionResult> OnPostAsync()
     {
         try
         {
@@ -34,18 +31,20 @@ public class CreateCompanyModel : PageModel
 
             if (response.IsSuccessStatusCode)
             {
-                return;
+                return RedirectToPage("/Company/Index");
                 //return RedirectToPage("Success"); // Redireciona para uma página de sucesso
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "Erro ao cadastrar empresa.");
+                return Page();
             }
         }
         catch (HttpRequestException ex)
         {
             _logger.LogError(ex, "Erro ao cadastrar empresa.");
             ModelState.AddModelError(string.Empty, "Erro ao conectar-se ao servidor.");
+            return Page();
         }
     }
 }

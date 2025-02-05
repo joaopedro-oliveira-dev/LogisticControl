@@ -20,7 +20,7 @@ public class UpdateCompanyModel : PageModel
     [BindProperty(SupportsGet = true)]
     public int Id { get; set; }
     public CompanyGetDTO? Company { get; set; } = new();
-    public List<string> PartnershipTypes { get; set; } = new();
+    public List<PartnershipTypeEnum> PartnershipTypes { get; set; } = new();
     public async Task OnGetAsync()
     {
         Company = await _httpClient.GetFromJsonAsync<CompanyGetDTO>($"https://localhost:7235/Company/{Id}");
@@ -28,10 +28,7 @@ public class UpdateCompanyModel : PageModel
         //{
         //    return RedirectToPage("/EmpresaInexistente");
         //}
-        PartnershipTypes = Enum.GetValues(typeof(PartnershipTypeEnum))
-           .Cast<PartnershipTypeEnum>()
-           .Select(e => e.GetFormattedName())
-           .ToList();
+        PartnershipTypes = EnumExtensions.GetAllEnums<PartnershipTypeEnum>();
     }
     [BindProperty]
     public CompanyPutDTO CompanyPut { get; set; } = new();
@@ -39,11 +36,11 @@ public class UpdateCompanyModel : PageModel
     {
         try
         {
-            var response = await _httpClient.PutAsJsonAsync("https://localhost:7235/Company", CompanyPut);
+            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7235/Company/{Id}", CompanyPut);
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToPage("/GetCompany");
+                return RedirectToPage("/Company/Index");
             }
             else
             {

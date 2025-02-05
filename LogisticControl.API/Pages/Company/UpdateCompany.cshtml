@@ -1,4 +1,5 @@
 ﻿@page "/PutCompany/{id:int}"
+@using LogisticControl.Core.Helpers
 @model LogisticControl.Api.Pages.Company.UpdateCompanyModel
 @{
     ViewData["Title"] = "Editar Empresa";
@@ -16,7 +17,7 @@
         <select id="selectPartnershipType" name="PartnershipType" required>
             @foreach (var partnershipType in Model.PartnershipTypes)
             {
-                <option value="@partnershipType" selected="@(partnershipType == Model.Company.PartnershipType ? "selected" : null)">@partnershipType</option>
+                <option value="@partnershipType" selected="@(partnershipType.ToString() == Model.Company.PartnershipType ? "selected" : null)">@partnershipType.GetFormattedName()</option>
             }
         </select>
     </div>
@@ -24,5 +25,5 @@
         <label for="inputPhone">Telefone:</label>
         <input type="text" id="inputPhone" name="Phone" value="@Model.Company.Phone" required />
     </div>
-    <button type="submit">Incluir</button>
+    <button type="submit">Editar</button>
 </form>

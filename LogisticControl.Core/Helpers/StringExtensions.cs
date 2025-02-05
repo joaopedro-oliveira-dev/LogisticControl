@@ -1,8 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 
 namespace LogisticControl.Core.Helpers;
 
-public static class NamingConvertionHelper
+public static class StringExtensions
 {
     public static string ToUnderscoreCase(this string str)
     {
@@ -14,5 +15,9 @@ public static class NamingConvertionHelper
                 ? "_" + x
                 : x.ToString())
         ).ToLower();
+    }
+    public static string ToSpacedPascalCase(this string str)
+    {
+        return string.Concat(str.Select((x, i) => i > 0 && char.IsUpper(x) ? " " + x : x.ToString()));
     }
 }

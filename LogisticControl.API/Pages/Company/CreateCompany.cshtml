@@ -1,4 +1,5 @@
 ﻿@page "/PostCompany"
+@using LogisticControl.Core.Helpers
 @model LogisticControl.Api.Pages.Company.CreateCompanyModel
 @{
     ViewData["Title"] = "Incluir Empresa";
@@ -16,7 +17,7 @@
         <select id="selectPartnershipType" name="PartnershipType" required>
             @foreach(var partnershipType in Model.PartnershipTypes)
             {
-                <option value="@partnershipType">@partnershipType</option>
+                <option value="@partnershipType">@partnershipType.GetFormattedName()</option>
             }
         </select>
     </div>
