@@ -1,0 +1,103 @@
+﻿@page "/ViewCompany/{id:int}"
+@model LogisticControl.Api.Pages.Company.Address.ViewCompanyModel
+@{
+    ViewData["Title"] = "Dados Empresa";
+}
+
+<h2>Dados Empresa</h2>
+
+<div>
+    <label for="inputName">Nome:</label>
+    <input type="text" id="inputName" name="Name" value="@Model.Company.Name" disabled />
+</div>
+<div>
+    <label for="inputPartnershipType">Tipo de Parceria:</label>
+    <input type="text" id="inputPartnershipType" name="PartnershipType" value="@Model.Company.PartnershipType" disabled />
+</div>
+<div>
+    <label for="inputPhone">Telefone:</label>
+    <input type="text" id="inputPhone" name="Phone" value="@Model.Company.Phone" disabled />
+</div>
+<a asp-page="/Company/Index">
+    <button>Voltar</button>
+</a>
+<hr />
+<form method="post">
+    <div>
+        <label for="inputStreet">Logradouro:</label>
+        <input type="text" id="inputStreet" name="Street" required />
+    </div>
+    <div>
+        <label for="inputNumber">Número:</label>
+        <input type="number" id="inputNumber" name="Number" required />
+    </div>
+    <div>
+        <label for="inputComplement">Complemento:</label>
+        <input type="text" id="inputComplement" name="Complement" />
+    </div>
+    <div>
+        <label for="inputNeighborhood">Bairro:</label>
+        <input type="text" id="inputNeighborhood" name="Neighborhood" required />
+    </div>
+    <div>
+        <label for="inputCity">Cidade:</label>
+        <input type="text" id="inputCity" name="City" required />
+    </div>
+    <div>
+        <label for="selectState">Estado:</label>
+        <select id="selectState" name="State" required>
+            @foreach(var state in Model.States) 
+            {
+                <option value="@state">@state.ToString()</option>
+            }
+        </select>
+    </div>
+    <div>
+        <button type="submit">Incluir Endereço</button>
+    </div>
+</form>
+<hr />
+<table>
+    <thead>
+        <tr>
+            <td>Logradouro</td>
+            <td>Número</td>
+            <td>Complemento</td>
+            <td>Bairro</td>
+            <td>Estado</td>
+            <td>Ações</td>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.Addresses.Any()) 
+        {
+            @foreach(var address in Model.Addresses) 
+            {
+                <tr>
+                    <td>@address.Street</td>
+                    <td>@address.Number</td>
+                    <td>@address.Complement</td>
+                    <td>@address.Neighborhood</td>
+                    <td>@address.City</td>
+                    <td>@address.State</td>
+                    <td>
+                        <a asp-page="/Company/Address/UpdateAddress" asp-route-id="@address.Id" class="btn btn-sm btn-outline-primary" title="Editar">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteAddress(@address.Id)" title="Excluir">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+        else 
+        {
+            <tr>
+                <td colspan="5">Nenhum registro encontrado.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/js/address.js"></script>

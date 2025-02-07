@@ -4,14 +4,14 @@ using LogisticControl.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace LogisticControl.Api.Pages.Company;
+namespace LogisticControl.Api.Pages.Company.Address;
 
-public class UpdateCompanyModel : PageModel
+public class ViewCompanyModel : PageModel
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger<CreateCompanyModel> _logger;
 
-    public UpdateCompanyModel(HttpClient httpClient, ILogger<CreateCompanyModel> logger)
+    public ViewCompanyModel(HttpClient httpClient, ILogger<CreateCompanyModel> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -21,6 +21,11 @@ public class UpdateCompanyModel : PageModel
     public int Id { get; set; }
     public CompanyGetDTO? Company { get; set; } = new();
     public List<PartnershipTypeEnum> PartnershipTypes { get; set; } = new();
+    public List<AddressGetDTO>? Addresses { get; set; } = new();
+    public List<StateEnum> States { get; set; } = new();
+    [BindProperty]
+    public AddressPostDTO Address { get; set; } = new();
+
     public async Task OnGetAsync()
     {
         Company = await _httpClient.GetFromJsonAsync<CompanyGetDTO>($"https://localhost:7235/Company/{Id}");
@@ -29,28 +34,29 @@ public class UpdateCompanyModel : PageModel
         //    return RedirectToPage("/EmpresaInexistente");
         //}
         PartnershipTypes = EnumExtensions.GetAllEnums<PartnershipTypeEnum>();
+        Addresses = await _httpClient.GetFromJsonAsync<List<AddressGetDTO>>($"https://localhost:7235/Address/Company/{Id}");
+        States = EnumExtensions.GetAllEnums<StateEnum>();
     }
-    [BindProperty]
-    public CompanyPutDTO CompanyPut { get; set; } = new();
     public async Task<IActionResult> OnPostAsync()
     {
         try
         {
-            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7235/Company/{Id}", CompanyPut);
+            Address.CompanyId = Id;
+            var response = await _httpClient.PostAsJsonAsync("https://localhost:7235/Address", Address);
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToPage("Index");
+                return RedirectToPage();
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Erro ao cadastrar empresa.");
+                ModelState.AddModelError(string.Empty, "Erro ao cadastrar endereço.");
                 return Page();
             }
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, "Erro ao editar empresa.");
+            _logger.LogError(ex, "Erro ao cadastrar endereço.");
             ModelState.AddModelError(string.Empty, "Erro ao conectar-se ao servidor.");
             return Page();
         }

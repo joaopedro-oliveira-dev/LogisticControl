@@ -30,7 +30,10 @@
                 <td>@company.PartnershipType.ToSpacedPascalCase()</td>
                 <td>@company.Phone</td>
                 <td>
-                    <a href="/PutCompany/@company.Id" class="btn btn-sm btn-outline-primary" title="Editar">
+                    <a asp-page="/Company/Address/ViewCompany" asp-route-id="@company.Id" class="btn btn-sm btn-outline-info" title="Visualizar">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a asp-page="/Company/UpdateCompany" asp-route-id="@company.Id" class="btn btn-sm btn-outline-primary" title="Editar">
                         <i class="bi bi-pencil-square"></i>
                     </a>
                     <button class="btn btn-sm btn-outline-danger" onclick="deleteCompany(@company.Id)" title="Excluir">
@@ -43,7 +46,7 @@
     else
     {
         <tr>
-            <td>Nenhum registro encontrado.</td>
+            <td colspan="5">Nenhum registro encontrado.</td>
         </tr>
     }
     </tbody>

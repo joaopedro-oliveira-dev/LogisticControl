@@ -31,7 +31,7 @@ public class CreateCompanyModel : PageModel
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToPage("/Company/Index");
+                return RedirectToPage("Index");
                 //return RedirectToPage("Success"); // Redireciona para uma página de sucesso
             }
             else
