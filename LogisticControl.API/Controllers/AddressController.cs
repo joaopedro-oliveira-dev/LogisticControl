@@ -16,15 +16,11 @@ public class AddressController : ControllerBase
 {
     private readonly IAddressService _addressService;
     private readonly IMapper _mapper;
-    private readonly IValidator<AddressPostDTO> _validatorPost;
-    private readonly IValidator<AddressPutDTO> _validatorPut;
 
     public AddressController(IAddressService addressService, IMapper mapper, IValidator<AddressPostDTO> validatorPost, IValidator<AddressPutDTO> validatorPut)
     {
         _addressService = addressService;
         _mapper = mapper;
-        _validatorPost = validatorPost;
-        _validatorPut = validatorPut;
     }
 
     [HttpGet]
@@ -80,14 +76,12 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPost.ValidateAsync(modelDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 Address model = _mapper.Map<Address>(modelDTO);
                 _addressService.Add(model);
             }
-            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+            else return BadRequest(ModelState);
 
             if(await _addressService.SaveChangesAsync())
             {
@@ -106,9 +100,7 @@ public class AddressController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPut.ValidateAsync(modelDTO);
-
-            if(validationDTO.IsValid)
+            if(ModelState.IsValid)
             {
                 var address = await _addressService.GetAddressAsyncById(addressId);
                 if (address == null) return NotFound();
@@ -118,7 +110,7 @@ public class AddressController : ControllerBase
             }
             else
             {
-                return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+                return BadRequest(ModelState);
             }
 
             if (await _addressService.SaveChangesAsync()) 

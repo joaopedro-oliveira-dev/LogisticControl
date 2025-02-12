@@ -1,17 +1,16 @@
-using LogisticControl.Core.Helpers;
 using LogisticControl.Domain.DTOs;
-using LogisticControl.Domain.Enums;
+using LogisticControl.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace LogisticControl.Api.Pages.Company;
+namespace LogisticControl.Api.Pages.Driver;
 
-public class UpdateCompanyModel : PageModel
+public class UpdateDriverModel : PageModel
 {
     private readonly HttpClient _httpClient;
-    private readonly ILogger<CreateCompanyModel> _logger;
+    private readonly ILogger<UpdateDriverModel> _logger;
 
-    public UpdateCompanyModel(HttpClient httpClient, ILogger<CreateCompanyModel> logger)
+    public UpdateDriverModel(HttpClient httpClient, ILogger<UpdateDriverModel> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -19,19 +18,21 @@ public class UpdateCompanyModel : PageModel
 
     [BindProperty(SupportsGet = true)]
     public int Id { get; set; }
-    public CompanyGetDTO? Company { get; set; } = new();
-    public List<PartnershipTypeEnum> PartnershipTypes { get; set; } = new();
+    public DriverGetDTO? Driver { get; set; } = new();
+
     public async Task OnGetAsync()
     {
-        Company = await _httpClient.GetFromJsonAsync<CompanyGetDTO>($"https://localhost:7235/Company/{Id}");
-        //if (Company == null )
-        //{
-        //    return RedirectToPage("/EmpresaInexistente");
-        //}
-        PartnershipTypes = EnumExtensions.GetAllEnums<PartnershipTypeEnum>();
+        try
+        {
+            Driver = await _httpClient.GetFromJsonAsync<DriverGetDTO>($"https://localhost:7235/Driver/{Id}");
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex, "Erro ao buscar dados dos motoristas.");
+        }
     }
     [BindProperty]
-    public CompanyPutDTO CompanyPut { get; set; } = new();
+    public DriverPutDTO DriverPut { get; set; }
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
@@ -40,7 +41,7 @@ public class UpdateCompanyModel : PageModel
         }
         try
         {
-            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7235/Company/{Id}", CompanyPut);
+            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7235/Driver/{Id}", DriverPut);
 
             if (response.IsSuccessStatusCode)
             {
@@ -51,7 +52,7 @@ public class UpdateCompanyModel : PageModel
                 var errors = await response.Content.ReadFromJsonAsync<Dictionary<string, string[]>>();
                 if (errors != null)
                 {
-                    foreach (var error in errors)
+                    foreach(var error in errors)
                     {
                         foreach (var message in error.Value)
                         {
@@ -61,14 +62,14 @@ public class UpdateCompanyModel : PageModel
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Erro ao editar empresa.");
+                    ModelState.AddModelError(string.Empty, "Erro ao editar motorista.");
                     return Page();
                 }
             }
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, "Erro ao editar empresa.");
+            _logger.LogError(ex, "Erro ao editar motorista.");
             ModelState.AddModelError(string.Empty, "Erro ao conectar-se ao servidor.");
         }
 

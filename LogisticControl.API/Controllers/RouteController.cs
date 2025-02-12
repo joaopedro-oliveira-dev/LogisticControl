@@ -15,14 +15,10 @@ public class RouteController : ControllerBase
 {
     private readonly IRouteService _routeService;
     private readonly IMapper _mapper;
-    private readonly IValidator<RoutePostDTO> _validatorPost;
-    private readonly IValidator<RoutePutDTO> _validatorPut;
     public RouteController(IRouteService routeService, IMapper mapper, IValidator<RoutePostDTO> validatorPost, IValidator<RoutePutDTO> validatorPut)
     {
         _routeService = routeService;
         _mapper = mapper;
-        _validatorPost = validatorPost;
-        _validatorPut = validatorPut;
     }
 
     [HttpGet]
@@ -94,14 +90,12 @@ public class RouteController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPost.ValidateAsync(modelDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 Route model = _mapper.Map<Route>(modelDTO);
                 _routeService.Add(model);
             }
-            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+            else return BadRequest(ModelState);
 
             if (await _routeService.SaveChangesAsync())
             {
@@ -120,16 +114,14 @@ public class RouteController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPut.ValidateAsync(modelDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 var route = await _routeService.GetRouteAsyncById(routeId);
                 if (route == null) return NotFound();
                 _mapper.Map(modelDTO, route);
                 _routeService.Update(route);
             }
-            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+            else return BadRequest(ModelState);
 
             if (await _routeService.SaveChangesAsync())
             {

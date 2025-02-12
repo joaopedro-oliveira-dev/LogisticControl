@@ -9,23 +9,28 @@
 <form method="post">
     <div>
         <label for="inputStreet">Logradouro:</label>
-        <input type="text" id="inputStreet" name="Street" value="@Model.Address.Street" required />
+        <input type="text" id="inputStreet" asp-for="AddressPut.Street" value="@Model.Address.Street" required />
+        <span asp-validation-for="AddressPut.Street" class="text-danger"></span>
     </div>
     <div>
         <label for="inputNumber">Número:</label>
-        <input type="number" id="inputNumber" name="Number" value="@Model.Address.Number" required />
+        <input type="number" id="inputNumber" asp-for="AddressPut.Number" value="@Model.Address.Number" required />
+        <span asp-validation-for="AddressPut.Number" class="text-danger"></span>
     </div>
     <div>
         <label for="inputComplement">Complemento:</label>
-        <input type="text" id="inputComplement" value="@Model.Address.Complement" name="Complement" />
+        <input type="text" id="inputComplement" asp-for="AddressPut.Complement" value="@Model.Address.Complement"/>
+        <span asp-validation-for="AddressPut.Complement" class="text-danger"></span>
     </div>
     <div>
         <label for="inputNeighborhood">Bairro:</label>
-        <input type="text" id="inputNeighborhood" value="@Model.Address.Neighborhood" name="Neighborhood" required />
+        <input type="text" id="inputNeighborhood" asp-for="AddressPut.Neighborhood" value="@Model.Address.Neighborhood" required />
+        <span asp-validation-for="AddressPut.Neighborhood" class="text-danger"></span>
     </div>
     <div>
         <label for="inputCity">Cidade:</label>
-        <input type="text" id="inputCity" value="@Model.Address.City" name="City" required />
+        <input type="text" id="inputCity" asp-for="AddressPut.City" value="@Model.Address.City" required />
+        <span asp-validation-for="AddressPut.City" class="text-danger"></span>
     </div>
     <div>
         <label for="selectState">Estado:</label>
@@ -43,3 +48,8 @@
 <a asp-page="/Company/Address/ViewCompany" asp-route-id="@Model.Address.CompanyId">
     <button>Voltar</button>
 </a>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

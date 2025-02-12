@@ -10,19 +10,16 @@ namespace LogisticControl.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = "Administrador")]
+//[Authorize(Roles = "Administrador")]
 public class DriverController : ControllerBase
 {
     private readonly IDriverService _driverService;
     private readonly IMapper _mapper;
-    private readonly IValidator<DriverPostDTO> _validatorPost;
-    private readonly IValidator<DriverPutDTO> _validatorPut;
 
-    public DriverController(IDriverService driverService, IMapper mapper, IValidator<DriverPostDTO> validatorPost)
+    public DriverController(IDriverService driverService, IMapper mapper)
     {
         _driverService = driverService;
         _mapper = mapper;
-        _validatorPost = validatorPost;
     }
 
     [HttpGet]
@@ -30,10 +27,10 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var companies = await _driverService.GetAllDriversAsync(true);
+            var drivers = await _driverService.GetAllDriversAsync(true);
 
-            var companiesDTO = companies.Select(c => _mapper.Map<DriverGetDTO>(c)).ToList();
-            return Ok(companiesDTO);
+            var driversDTO = drivers.Select(c => _mapper.Map<DriverGetDTO>(c)).ToList();
+            return Ok(driversDTO);
         }
         catch (Exception)
         {
@@ -79,14 +76,12 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPost.ValidateAsync(modelDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 Driver model = _mapper.Map<Driver>(modelDTO);
                 _driverService.Add(model);
             }
-            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage)); 
+            else return BadRequest(ModelState); 
 
             if (await _driverService.SaveChangesAsync())
             {
@@ -105,16 +100,14 @@ public class DriverController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPut.ValidateAsync(modelDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 var driver = await _driverService.GetDriverAsyncById(driverId);
                 if (driver == null) return NotFound();
                 _mapper.Map(modelDTO, driver);
                 _driverService.Update(driver);
             }
-            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+            else return BadRequest(ModelState);
 
             if (await _driverService.SaveChangesAsync())
             {

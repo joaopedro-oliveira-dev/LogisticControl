@@ -16,16 +16,12 @@ public class UserController : ControllerBase
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IValidator<UserPostDTO> _validatorPost;
-    private readonly IValidator<UserPutDTO> _validatorPut;
 
     public UserController(IUserService userService, IMapper mapper, IHttpContextAccessor httpContextAccessor, IValidator<UserPostDTO> validatorPost, IValidator<UserPutDTO> validatorPut)
     {
         _userService = userService;
         _mapper = mapper;
         _httpContextAccessor = httpContextAccessor;
-        _validatorPost = validatorPost;
-        _validatorPut = validatorPut;
     }
 
     [HttpGet()]
@@ -47,9 +43,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPost.ValidateAsync(modelDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 var anotherUser = await _userService.GetUserAsyncByEmail(modelDTO.Email);
                 if (anotherUser is null)
@@ -59,7 +53,7 @@ public class UserController : ControllerBase
                 }
                 else return BadRequest("Já existe um usuário cadastrado com esse e-mail.");
             }
-            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+            else return BadRequest(ModelState);
 
             if (await _userService.SaveChangesAsync())
             {
@@ -78,9 +72,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPut.ValidateAsync(modelDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 var anotherUser = await _userService.GetUserAsyncByEmail(modelDTO.Email);
                 if (anotherUser is null)
@@ -92,6 +84,7 @@ public class UserController : ControllerBase
                 }
                 else return BadRequest("Já existe um usuário cadastrado com esse e-mail.");
             }
+            else return BadRequest(ModelState);
 
             if (await _userService.SaveChangesAsync())
             {

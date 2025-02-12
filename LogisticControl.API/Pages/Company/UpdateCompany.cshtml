@@ -23,10 +23,16 @@
     </div>
     <div>
         <label for="inputPhone">Telefone:</label>
-        <input type="text" id="inputPhone" name="Phone" value="@Model.Company.Phone" required />
+        <input type="text" id="inputPhone" value="@Model.Company.Phone" asp-for="CompanyPut.Phone" required />
+        <span asp-validation-for="CompanyPut.Phone" class="text-danger"></span>
     </div>
     <button type="submit">Editar</button>
 </form>
 <a asp-page="/Company/Index">
     <button>Voltar</button>
 </a>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

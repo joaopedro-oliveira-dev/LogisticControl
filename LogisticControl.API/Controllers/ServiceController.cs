@@ -15,15 +15,11 @@ public class ServiceController : ControllerBase
 {
     private readonly IServiceService _serviceService;
     private readonly IMapper _mapper;
-    private readonly IValidator<ServicePostDTO> _validatorPost;
-    private readonly IValidator<ServicePutDTO> _validatorPut;
 
     public ServiceController(IServiceService serviceService, IMapper mapper, IValidator<ServicePostDTO> validatorPost, IValidator<ServicePutDTO> validatorPut)
     {
         _serviceService = serviceService;
         _mapper = mapper;
-        _validatorPost = validatorPost;
-        _validatorPut = validatorPut;
     }
 
     [HttpGet]
@@ -93,14 +89,12 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPost.ValidateAsync(modelDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 Service model = _mapper.Map<Service>(modelDTO);
                 _serviceService.Add(model);
             }
-            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+            else return BadRequest(ModelState);
 
             if (await _serviceService.SaveChangesAsync())
             {
@@ -119,16 +113,14 @@ public class ServiceController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validatorPut.ValidateAsync(modelDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 var service = await _serviceService.GetServiceAsyncById(serviceId);
                 if (service == null) return NotFound();
                 _mapper.Map(modelDTO, service);
                 _serviceService.Update(service);
             }
-            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+            else return BadRequest(ModelState);
 
             if (await _serviceService.SaveChangesAsync())
             {

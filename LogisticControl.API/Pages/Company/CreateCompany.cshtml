@@ -10,7 +10,8 @@
 <form method="post">
     <div>
         <label for="inputName">Nome:</label>
-        <input type="text" id="inputName" name="Name" required />
+        <input type="text" id="inputName" asp-for="Company.Name" required />
+        <span asp-validation-for="Company.Name" class="text-danger"></span>
     </div>
     <div>
         <label for="selectPartnershipType">Tipo de Parceria:</label>
@@ -23,7 +24,8 @@
     </div>
     <div>
         <label for="inputPhone">Telefone:</label>
-        <input type="text" id="inputPhone" name="Phone" required />
+        <input type="text" id="inputPhone" asp-for="Company.Phone" required />
+        <span asp-validation-for="Company.Phone" class="text-danger"></span>
     </div>
     <button type="submit">Incluir</button>
 </form>
