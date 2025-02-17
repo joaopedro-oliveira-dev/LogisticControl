@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
-namespace LogisticControl.Core.Helpers;
+namespace LogisticControl.Core.Helpers.Extensions;
 
 public static class StringExtensions
 {

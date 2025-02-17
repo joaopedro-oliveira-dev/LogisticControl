@@ -1,4 +1,4 @@
-﻿namespace LogisticControl.Core.Helpers;
+﻿namespace LogisticControl.Core.Helpers.Extensions;
 
 public static class EnumExtensions
 {

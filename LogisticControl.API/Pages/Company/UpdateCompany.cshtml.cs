@@ -1,4 +1,5 @@
-using LogisticControl.Core.Helpers;
+using LogisticControl.Core.Helpers.Extensions;
+using LogisticControl.Core.HttpClients;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,10 @@ namespace LogisticControl.Api.Pages.Company;
 
 public class UpdateCompanyModel : PageModel
 {
-    private readonly HttpClient _httpClient;
+    private readonly CompanyHttpClient _httpClient;
     private readonly ILogger<CreateCompanyModel> _logger;
 
-    public UpdateCompanyModel(HttpClient httpClient, ILogger<CreateCompanyModel> logger)
+    public UpdateCompanyModel(CompanyHttpClient httpClient, ILogger<CreateCompanyModel> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -23,7 +24,7 @@ public class UpdateCompanyModel : PageModel
     public List<PartnershipTypeEnum> PartnershipTypes { get; set; } = new();
     public async Task OnGetAsync()
     {
-        Company = await _httpClient.GetFromJsonAsync<CompanyGetDTO>($"https://localhost:7235/Company/{Id}");
+        Company = await _httpClient.GetCompanyAsyncById(Id);
         //if (Company == null )
         //{
         //    return RedirectToPage("/EmpresaInexistente");
@@ -40,7 +41,7 @@ public class UpdateCompanyModel : PageModel
         }
         try
         {
-            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7235/Company/{Id}", CompanyPut);
+            var response = await _httpClient.UpdateCompanyAsync(Id, CompanyPut);
 
             if (response.IsSuccessStatusCode)
             {

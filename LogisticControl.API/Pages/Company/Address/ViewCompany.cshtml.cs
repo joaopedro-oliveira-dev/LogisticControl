@@ -1,4 +1,5 @@
-using LogisticControl.Core.Helpers;
+using LogisticControl.Core.Helpers.Extensions;
+using LogisticControl.Core.HttpClients;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -8,12 +9,14 @@ namespace LogisticControl.Api.Pages.Company.Address;
 
 public class ViewCompanyModel : PageModel
 {
-    private readonly HttpClient _httpClient;
+    private readonly CompanyHttpClient _companyHttpClient;
+    private readonly AddressHttpClient _addressHttpClient;
     private readonly ILogger<CreateCompanyModel> _logger;
 
-    public ViewCompanyModel(HttpClient httpClient, ILogger<CreateCompanyModel> logger)
+    public ViewCompanyModel(CompanyHttpClient companyHttpClient, ILogger<CreateCompanyModel> logger, AddressHttpClient addressHttpClient)
     {
-        _httpClient = httpClient;
+        _companyHttpClient = companyHttpClient;
+        _addressHttpClient = addressHttpClient;
         _logger = logger;
     }
 
@@ -21,20 +24,20 @@ public class ViewCompanyModel : PageModel
     public int Id { get; set; }
     public CompanyGetDTO? Company { get; set; } = new();
     public List<PartnershipTypeEnum> PartnershipTypes { get; set; } = new();
-    public List<AddressGetDTO>? Addresses { get; set; } = new();
+    public List<AddressGetDTO> Addresses { get; set; } = new();
     public List<StateEnum> States { get; set; } = new();
     [BindProperty]
     public AddressPostDTO Address { get; set; } = new();
 
     public async Task OnGetAsync()
     {
-        Company = await _httpClient.GetFromJsonAsync<CompanyGetDTO>($"https://localhost:7235/Company/{Id}");
+        Company = await _companyHttpClient.GetCompanyAsyncById(Id);
         //if (Company == null )
         //{
         //    return RedirectToPage("/EmpresaInexistente");
         //}
         PartnershipTypes = EnumExtensions.GetAllEnums<PartnershipTypeEnum>();
-        Addresses = await _httpClient.GetFromJsonAsync<List<AddressGetDTO>>($"https://localhost:7235/Address/Company/{Id}");
+        Addresses = await _addressHttpClient.GetAllAddressesAsync();
         States = EnumExtensions.GetAllEnums<StateEnum>();
     }
     public async Task<IActionResult> OnPostAsync()
@@ -42,7 +45,7 @@ public class ViewCompanyModel : PageModel
         try
         {
             Address.CompanyId = Id;
-            var response = await _httpClient.PostAsJsonAsync("https://localhost:7235/Address", Address);
+            var response = await _addressHttpClient.CreateAddressAsync(Address);
 
             if (response.IsSuccessStatusCode)
             {

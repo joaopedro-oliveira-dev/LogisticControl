@@ -25,27 +25,32 @@
 <form method="post">
     <div>
         <label for="inputStreet">Logradouro:</label>
-        <input type="text" id="inputStreet" name="Street" required />
+        <input type="text" id="inputStreet" asp-for="Address.Street" required />
+        <span asp-validation-for="Address.Street" class="text-danger"></span>
     </div>
     <div>
         <label for="inputNumber">Número:</label>
-        <input type="number" id="inputNumber" name="Number" required />
+        <input type="number" id="inputNumber" asp-for="Address.Number" required />
+        <span asp-validation-for="Address.Number" class="text-danger"></span>
     </div>
     <div>
         <label for="inputComplement">Complemento:</label>
-        <input type="text" id="inputComplement" name="Complement" />
+        <input type="text" id="inputComplement" asp-for="Address.Complement" />
+        <span asp-validation-for="Address.Complement" class="text-danger"></span>
     </div>
     <div>
         <label for="inputNeighborhood">Bairro:</label>
-        <input type="text" id="inputNeighborhood" name="Neighborhood" required />
+        <input type="text" id="inputNeighborhood" asp-for="Address.Neighborhood" required />
+        <span asp-validation-for="Address.Neighborhood" class="text-danger"></span>
     </div>
     <div>
         <label for="inputCity">Cidade:</label>
-        <input type="text" id="inputCity" name="City" required />
+        <input type="text" id="inputCity" asp-for="Address.City" required />
+        <span asp-validation-for="Address.City" class="text-danger"></span>
     </div>
     <div>
         <label for="selectState">Estado:</label>
-        <select id="selectState" name="State" required>
+        <select id="selectState" asp-for="Address.State" required>
             @foreach(var state in Model.States) 
             {
                 <option value="@state">@state.ToString()</option>
@@ -101,3 +106,8 @@
 </table>
 
 <script src="~/js/address.js"></script>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

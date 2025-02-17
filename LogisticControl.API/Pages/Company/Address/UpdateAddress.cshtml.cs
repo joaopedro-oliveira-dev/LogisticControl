@@ -1,4 +1,5 @@
-using LogisticControl.Core.Helpers;
+using LogisticControl.Core.Helpers.Extensions;
+using LogisticControl.Core.HttpClients;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,10 @@ namespace LogisticControl.Api.Pages.Company.Address
 {
     public class UpdateAddressModel : PageModel
     {
-        private readonly HttpClient _httpClient;
+        private readonly AddressHttpClient _httpClient;
         private readonly ILogger<UpdateAddressModel> _logger;
 
-        public UpdateAddressModel(HttpClient httpClient, ILogger<UpdateAddressModel> logger)
+        public UpdateAddressModel(AddressHttpClient httpClient, ILogger<UpdateAddressModel> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
@@ -26,7 +27,7 @@ namespace LogisticControl.Api.Pages.Company.Address
         {
             try
             {
-                Address = await _httpClient.GetFromJsonAsync<AddressGetDTO>($"https://localhost:7235/Address/{Id}");
+                Address = await _httpClient.GetAddressAsyncById(Id);
                 States = EnumExtensions.GetAllEnums<StateEnum>();
             }
             catch (Exception ex)
@@ -41,11 +42,11 @@ namespace LogisticControl.Api.Pages.Company.Address
         {
             try
             {
-                var response = await _httpClient.PutAsJsonAsync($"https://localhost:7235/Address/{Id}", AddressPut);
+                var response = await _httpClient.UpdateAddressAsync(Id, AddressPut);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Address = await _httpClient.GetFromJsonAsync<AddressGetDTO>($"https://localhost:7235/Address/{Id}");
+                    Address = await _httpClient.GetAddressAsyncById(Id);
                     return RedirectToPage("ViewCompany", new { id = Address.CompanyId });
                 }
                 else

@@ -1,3 +1,4 @@
+using LogisticControl.Core.HttpClients;
 using LogisticControl.Domain.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,10 +7,10 @@ namespace LogisticControl.Api.Pages.Company;
 
 public class IndexModel : PageModel
 {
-    private readonly HttpClient _httpClient;
+    private readonly CompanyHttpClient _httpClient;
     private readonly ILogger<IndexModel> _logger;
 
-    public IndexModel(HttpClient httpClient, ILogger<IndexModel> logger)
+    public IndexModel(CompanyHttpClient httpClient, ILogger<IndexModel> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -20,7 +21,7 @@ public class IndexModel : PageModel
     {
         try
         {
-            Companies = await _httpClient.GetFromJsonAsync<List<CompanyGetDTO>>("https://localhost:7235/Company") ?? new List<CompanyGetDTO>();
+            Companies = await _httpClient.GetAllCompaniesAsync();
         }
         catch (HttpRequestException ex) 
         {

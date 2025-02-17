@@ -1,4 +1,5 @@
-using LogisticControl.Core.Helpers;
+using LogisticControl.Core.Helpers.Extensions;
+using LogisticControl.Core.HttpClients;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,10 @@ namespace LogisticControl.Api.Pages.Company;
 
 public class CreateCompanyModel : PageModel
 {
-    private readonly HttpClient _httpClient;
+    private readonly CompanyHttpClient _httpClient;
     private readonly ILogger<CreateCompanyModel> _logger;
 
-    public CreateCompanyModel(HttpClient httpClient, ILogger<CreateCompanyModel> logger)
+    public CreateCompanyModel(CompanyHttpClient httpClient, ILogger<CreateCompanyModel> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -27,12 +28,11 @@ public class CreateCompanyModel : PageModel
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync("https://localhost:7235/Company", Company);
+            var response = await _httpClient.CreateCompanyAsync(Company);
 
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToPage("Index");
-                //return RedirectToPage("Success"); // Redireciona para uma página de sucesso
             }
             else
             {

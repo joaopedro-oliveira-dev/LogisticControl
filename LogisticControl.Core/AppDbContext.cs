@@ -1,4 +1,4 @@
-﻿using LogisticControl.Core.Helpers;
+﻿using LogisticControl.Core.Helpers.Extensions;
 using LogisticControl.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;

@@ -1,5 +1,5 @@
 ﻿@page "/PutCompany/{id:int}"
-@using LogisticControl.Core.Helpers
+@using LogisticControl.Core.Helpers.Extensions
 @model LogisticControl.Api.Pages.Company.UpdateCompanyModel
 @{
     ViewData["Title"] = "Editar Empresa";
@@ -14,7 +14,7 @@
 <form method="post">
     <div>
         <label for="selectPartnershipType">Tipo de Parceria:</label>
-        <select id="selectPartnershipType" name="PartnershipType" required>
+        <select id="selectPartnershipType" asp-for="CompanyPut.PartnershipType" required>
             @foreach (var partnershipType in Model.PartnershipTypes)
             {
                 <option value="@partnershipType" selected="@(partnershipType.ToString() == Model.Company.PartnershipType ? "selected" : null)">@partnershipType.GetFormattedName()</option>

@@ -1,5 +1,5 @@
 ﻿@page "/PostCompany"
-@using LogisticControl.Core.Helpers
+@using LogisticControl.Core.Helpers.Extensions
 @model LogisticControl.Api.Pages.Company.CreateCompanyModel
 @{
     ViewData["Title"] = "Incluir Empresa";
@@ -32,3 +32,8 @@
 <a asp-page="/Company/Index">
     <button>Voltar</button>
 </a>
+
+@section Scripts
+            {
+    <partial name="_ValidationScriptsPartial" />
+}

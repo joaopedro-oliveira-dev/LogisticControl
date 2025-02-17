@@ -1,0 +1,29 @@
+﻿@page "/PostDriver"
+@model LogisticControl.Api.Pages.Driver.CreateDriverModel
+@{
+    ViewData["title"] = "Incluir Motorista";
+}
+
+<h2>Incluir Motorista</h2>
+
+<form method="post">
+    <div>
+        <label for="inputName">Nome:</label>
+        <input type="text "id="inputName" asp-for="Driver.Name" />
+        <span asp-validation-for="Driver.Name" class="text-danger"></span>
+    </div>
+    <div>
+        <label for="inputPhone">Telefone:</label>
+        <input type="text" id="inputPhone" asp-for="Driver.Phone" />
+        <span asp-validation-for="Driver.Phone" class="text-danger"></span>
+    </div>
+    <button type="submit">Incluir</button>
+</form>
+<a asp-page="/Driver/Index">
+    <button>Voltar</button>
+</a>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

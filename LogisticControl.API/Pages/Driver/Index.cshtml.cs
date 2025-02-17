@@ -1,3 +1,4 @@
+using LogisticControl.Core.HttpClients;
 using LogisticControl.Domain.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,10 +7,10 @@ namespace LogisticControl.Api.Pages.Driver;
 
 public class IndexModel : PageModel
 {
-    private readonly HttpClient _httpClient;
+    private readonly DriverHttpClient _httpClient;
     private readonly ILogger<IndexModel> _logger;
 
-    public IndexModel(HttpClient httpClient, ILogger<IndexModel> logger)
+    public IndexModel(DriverHttpClient httpClient, ILogger<IndexModel> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -21,7 +22,7 @@ public class IndexModel : PageModel
     {
         try
         {
-            Drivers = await _httpClient.GetFromJsonAsync<List<DriverGetDTO>>("https://localhost:7235/Driver") ?? new List<DriverGetDTO>();
+            Drivers = await _httpClient.GetAllDriversAsync();
         }
         catch (HttpRequestException ex)
         {

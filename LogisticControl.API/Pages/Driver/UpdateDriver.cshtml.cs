@@ -1,3 +1,4 @@
+using LogisticControl.Core.HttpClients;
 using LogisticControl.Domain.DTOs;
 using LogisticControl.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,10 @@ namespace LogisticControl.Api.Pages.Driver;
 
 public class UpdateDriverModel : PageModel
 {
-    private readonly HttpClient _httpClient;
+    private readonly DriverHttpClient _httpClient;
     private readonly ILogger<UpdateDriverModel> _logger;
 
-    public UpdateDriverModel(HttpClient httpClient, ILogger<UpdateDriverModel> logger)
+    public UpdateDriverModel(DriverHttpClient httpClient, ILogger<UpdateDriverModel> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -24,7 +25,7 @@ public class UpdateDriverModel : PageModel
     {
         try
         {
-            Driver = await _httpClient.GetFromJsonAsync<DriverGetDTO>($"https://localhost:7235/Driver/{Id}");
+            Driver = await _httpClient.GetDriverAsyncById(Id);
         }
         catch (HttpRequestException ex)
         {
@@ -41,7 +42,7 @@ public class UpdateDriverModel : PageModel
         }
         try
         {
-            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7235/Driver/{Id}", DriverPut);
+            var response = await _httpClient.UpdateDriverAsync(Id, DriverPut);
 
             if (response.IsSuccessStatusCode)
             {
