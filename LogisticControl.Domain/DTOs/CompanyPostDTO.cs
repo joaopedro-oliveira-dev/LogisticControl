@@ -1,6 +1,4 @@
-﻿using LogisticControl.Domain.Enums;
-
-namespace LogisticControl.Domain.DTOs;
+﻿namespace LogisticControl.Domain.DTOs;
 
 public class CompanyPostDTO
 {

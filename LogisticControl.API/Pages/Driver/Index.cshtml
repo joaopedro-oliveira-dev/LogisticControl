@@ -1,0 +1,47 @@
+﻿@page "/GetDriver"
+@model LogisticControl.Api.Pages.Driver.IndexModel
+@{
+    ViewData["title"] = "Motoristas";
+}
+
+<h2>Motoristas</h2>
+<a href="/PostDriver" title="Incluir">
+    <button>Incluir</button>
+</a>
+<table>
+    <thead>
+        <td>Código</td>
+        <td>Nome</td>
+        <td>Telefone</td>
+        <td>Ações</td>
+    </thead>
+    <tbody>
+        @if(Model.Drivers.Any()) 
+        {
+            @foreach(var driver in Model.Drivers) 
+            {
+                <tr>
+                    <td>@driver.Id</td>
+                    <td>@driver.Name</td>
+                    <td>@driver.Phone</td>
+                    <td>
+                        <a asp-page="/Driver/UpdateDriver" asp-route-id="@driver.Id" class="btn btn-sm btn-outline-primary" title="Editar">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteDriver(@driver.Id)" title="Excluir">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+        else 
+        {
+            <tr>
+                <td colspan="3">Nenhum registro encontrado.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/js/driver.js"></script>

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using LogisticControl.Domain.Models;
 using FluentValidation.AspNetCore;
 using LogisticControl.Core.Validators;
+using LogisticControl.Core.HttpClients;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -124,6 +125,18 @@ builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyCont
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ServicePutValidator>());
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserPostValidator>());
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserPutValidator>());
+
+builder.Services.AddHttpClient("LogisticControlApi", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]
+        ?? throw new InvalidOperationException("A URL da API não foi configurada."));
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+builder.Services.AddScoped<ApiHttpClient>();
+builder.Services.AddScoped<CompanyHttpClient>();
+builder.Services.AddScoped<AddressHttpClient>();
+builder.Services.AddScoped<DriverHttpClient>();
 
 var app = builder.Build();
 

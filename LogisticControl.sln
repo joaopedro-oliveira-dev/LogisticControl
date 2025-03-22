@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticControl.Services", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticControl.Domain", "LogisticControl.Domain\LogisticControl.Domain.csproj", "{68E3119C-18F0-4FF4-8CDF-D7D7ACF1B2AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticControl.Api", "LogisticControl.API\LogisticControl.Api.csproj", "{4980B256-0BBB-4DE5-A756-B48B9380BE6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticControl.Api", "LogisticControl.API\LogisticControl.Api.csproj", "{4980B256-0BBB-4DE5-A756-B48B9380BE6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

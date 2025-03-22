@@ -1,0 +1,28 @@
+﻿@page "PutDriver/{id:int}"
+@model LogisticControl.Api.Pages.Driver.UpdateDriverModel
+@{
+    ViewData["title"] = "Editar Motorista";
+}
+
+<h2>Editar Motorista</h2>
+
+<form method="post">
+    <div>
+        <label for="inputName">Nome:</label>
+        <input type="text" id="inputName" name="Name" value="@Model.Driver.Name" required />
+    </div>
+    <div>
+        <label for="inputPhone">Telefone:</label>
+        <input type="text" id="inputPhone" value="@Model.Driver.Phone" asp-for="DriverPut.Phone" required />
+        <span asp-validation-for="DriverPut.Phone" class="text-danger"></span>
+    </div>
+    <button type="submit">Editar</button>
+</form>
+<a asp-page="/Driver/Index">
+    <button>Voltar</button>
+</a>
+
+@section Scripts 
+{
+    <partial name="_ValidationScriptsPartial" />
+}

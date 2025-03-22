@@ -1,0 +1,55 @@
+﻿@page "/GetCompany"
+@using LogisticControl.Core.Helpers.Extensions
+@model LogisticControl.Api.Pages.Company.IndexModel
+@{
+    ViewData["Title"] = "Empresas";
+}
+
+<h2>Empresas Parceiras</h2>
+<a href="/PostCompany" title="Incluir">
+    <button>Incluir</button>    
+</a>
+<table>
+    <thead>
+        <tr>
+            <td>Código</td>
+            <td>Nome</td>
+            <td>Tipo de Parceria</td>
+            <td>Telefone</td>
+            <td>Ações</td>
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model.Companies.Any()) 
+    {
+        @foreach(var company in Model.Companies) 
+        {
+            <tr>
+                <td>@company.Id</td>
+                <td>@company.Name</td>
+                <td>@company.PartnershipType.ToSpacedPascalCase()</td>
+                <td>@company.Phone</td>
+                <td>
+                    <a asp-page="/Company/Address/ViewCompany" asp-route-id="@company.Id" class="btn btn-sm btn-outline-info" title="Visualizar">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a asp-page="/Company/UpdateCompany" asp-route-id="@company.Id" class="btn btn-sm btn-outline-primary" title="Editar">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCompany(@company.Id)" title="Excluir">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="5">Nenhum registro encontrado.</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<script src="~/js/company.js"></script>

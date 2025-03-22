@@ -1,0 +1,14 @@
+﻿namespace LogisticControl.Core.Helpers.Extensions;
+
+public static class EnumExtensions
+{
+    public static string GetFormattedName(this Enum value)
+    {
+        var name = value.ToString();
+        return string.Concat(name.Select((x, i) => i > 0 && char.IsUpper(x) ? " " + x : x.ToString()));
+    }
+    public static List<T> GetAllEnums<T>() where T : Enum
+    {
+        return Enum.GetValues(typeof(T)).Cast<T>().ToList();
+    }
+}

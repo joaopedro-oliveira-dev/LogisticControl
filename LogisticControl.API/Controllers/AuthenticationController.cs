@@ -13,13 +13,11 @@ public class AuthenticationController : ControllerBase
 {
     private readonly ITokenService _tokenService;
     private readonly IMapper _mapper;
-    private readonly IValidator<LoginDTO> _validator;
 
     public AuthenticationController(ITokenService tokenService, IMapper mapper, IValidator<LoginDTO> validator)
     {
         _tokenService = tokenService;
         _mapper = mapper;
-        _validator = validator;
     }
 
     [HttpPost]
@@ -27,16 +25,14 @@ public class AuthenticationController : ControllerBase
     {
         try
         {
-            var validationDTO = await _validator.ValidateAsync(loginDTO);
-
-            if (validationDTO.IsValid)
+            if (ModelState.IsValid)
             {
                 var userLogin = _mapper.Map<User>(loginDTO);
                 var token = await _tokenService.GenerateToken(userLogin);
                 if (token == "") return Unauthorized("E-mail ou senha incorretos.");
                 return Ok(token);
             }
-            else return BadRequest(validationDTO.Errors.Select(e => e.ErrorMessage));
+            else return BadRequest(ModelState);
         }
         catch (Exception)
         {
